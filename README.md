@@ -1,2 +1,2 @@
 # gkatas
-katas for coding interviews
+Coding katas for coding interviews with TDD.
