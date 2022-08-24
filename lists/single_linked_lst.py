@@ -13,9 +13,24 @@ class SingleLnkdList:
         while node:
             yield node
             node = node.next
+    
+    def insert(self, value, position=-1):
+        new_node = SingleNode(value)
+        if position == -1:
+            self._insert_end(new_node)
+        elif position == 0:
+            new_node.next = self.head
+            self.head = new_node            
+        else:
+            node = self._get_node_at_position(position)
+            if node == self.tail:
+                node.next = new_node
+                self.tail = new_node
+            else:
+                new_node.next = node.next
+                node.next = new_node
 
-    def insert_end(self, v):
-        node = SingleNode(v)
+    def _insert_end(self, node):
         if self.head == None:
             self.head = node
             self.tail = node
@@ -26,7 +41,8 @@ class SingleLnkdList:
             tmp_n.next = node
             self.tail = node
 
-    def insert_at(self, position, value):
+
+    def _get_node_at_position(self, position):
         index = 0
         size = 0
         node = self.head
@@ -38,19 +54,43 @@ class SingleLnkdList:
         if size < index:
             raise Exception("Error: position is out of bounds")
         else:
-            new_node = SingleNode(value)
-            if node == self.head:
-                new_node.next = node
-                self.head = new_node
-            elif node == self.tail:
-                node.next = new_node
-                self.tail = new_node
-            else:
-                new_node.next = node.next
-                node.next = new_node
+            return node
 
-    def insert_head(self, value):
-        self.insert_at(0, value)
+
+    def pop(self, position = -1):
+        if position == -1:
+            return self._pop_tail()
+        elif position == 0:
+            tmp_node = self.head
+            self.head = tmp_node.next
+            return tmp_node.v
+        else:
+            prev_node = self._get_node_at_position(position)
+            tmp_node = prev_node.next
+            prev_node.next = tmp_node.next
+            if self.tail == tmp_node:
+                self.tail = prev_node
+            return tmp_node.v
+
+
+    def _pop_tail(self):
+        node = self.head
+        while node.next != self.tail:
+            node = node.next
+        ret = self.tail.v
+        self.tail = node
+        node.next = None
+        return ret
+
+    def peek(self, position = -1):
+        if position == -1:
+            return self.tail.v
+        elif position == 0:
+            return self.head.v
+        else:
+            node = self._get_node_at_position(position+1)
+            return node.v
+
 
     def display(self):
         result = "["
@@ -77,27 +117,27 @@ def test_create_empty_single_list():
     sl = SingleLnkdList()
     print(sl.display())
     assert sl.display() == "[]"
-    print("test_create_empy_single_list Pass")
+    print("test_create_empty_single_list Pass")
 
 def test_insert_end_one_item_single_list():
     sl = SingleLnkdList()
-    sl.insert_end('a')
+    sl.insert('a')
     print(sl.display())
     assert sl.display() == "['a']"
     print("test_insert_end_one_item_single_list Pass")
 
 def test_insert_end_n_items_single_list():
     sl = SingleLnkdList()
-    sl.insert_end('a')
-    sl.insert_end('b')
+    sl.insert('a')
+    sl.insert('b')
     print(sl.display())
     assert sl.display() == "['a' -> 'b']"
     assert sl.head.v == 'a'
     assert sl.tail.v == 'b'
 
-    sl.insert_end('c')
-    sl.insert_end('d')
-    sl.insert_end('e')
+    sl.insert('c')
+    sl.insert('d')
+    sl.insert('e')
     print(sl.display_all())
     assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'd' -> 'e'] - T:e"
     assert sl.head.v == 'a'
@@ -106,11 +146,11 @@ def test_insert_end_n_items_single_list():
     
 def sample_test_list():
     sl = SingleLnkdList()
-    sl.insert_end('a')
-    sl.insert_end('b')
-    sl.insert_end('c')
-    sl.insert_end('d')
-    sl.insert_end('e')
+    sl.insert('a')
+    sl.insert('b')
+    sl.insert('c')
+    sl.insert('d')
+    sl.insert('e')
     return sl
 
 def test_iterate_linked_list():
@@ -120,13 +160,13 @@ def test_iterate_linked_list():
 
 def test_insert_at_location():
     sl = sample_test_list()
-    sl.insert_at(3, 'f')
+    sl.insert('f', 3)
     print(sl.display_all())
     assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'f' -> 'd' -> 'e'] - T:e"
-    sl.insert_at(0, 'g')
+    sl.insert('g', 0)
     print(sl.display_all())
     assert sl.display_all() == "H:g - ['g' -> 'a' -> 'b' -> 'c' -> 'f' -> 'd' -> 'e'] - T:e"
-    sl.insert_at(7, 'h')
+    sl.insert('h', 7)
     print(sl.display_all())
     assert sl.display_all() == "H:g - ['g' -> 'a' -> 'b' -> 'c' -> 'f' -> 'd' -> 'e' -> 'h'] - T:h"
     print("test_insert_at_location Pass")
@@ -134,19 +174,73 @@ def test_insert_at_location():
 def test_fail_insert_at_location():
     sl = sample_test_list()
     try:
-        sl.insert_at(6, 'a')
+        sl.insert('a', 6)
         print(f'test_fail_insert_at_location Fail. Missing expected Exception')
     except Exception as e:
         assert 'Error' in str(e), f'Expected to return Error'
         print(f'test_fail_insert_at_location PASS. Expected Exception: "{e}"')
 
 
-def test_insert_at_head():
+def test_pop():
     sl = sample_test_list()
-    sl.insert_head('i')
+    elem = sl.pop()
+    assert elem == 'e'
     print(sl.display_all())
-    assert sl.display_all() == "H:i - ['i' -> 'a' -> 'b' -> 'c' -> 'd' -> 'e'] - T:e"
-    print('test_insert_at_head Pass')
+    assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'd'] - T:d"
+    print('test_pop Pass')
+
+def test_peek():
+    sl = sample_test_list()
+    elem = sl.peek()
+    assert elem == 'e'
+    assert sl.tail.v == 'e'
+    print('test_peek Pass')
+    
+def test_pop_n():
+    sl = sample_test_list()
+    
+    elem = sl.pop(2)
+    print(sl.display_all())
+    assert elem == 'c'
+    assert sl.tail.v == 'e'
+    assert sl.display_all() == "H:a - ['a' -> 'b' -> 'd' -> 'e'] - T:e"
+    
+    elem = sl.pop(0)
+    print(sl.display_all())
+    assert elem == 'a'
+    assert sl.head.v == 'b'
+    assert sl.display_all() == "H:b - ['b' -> 'd' -> 'e'] - T:e"
+    
+    elem = sl.pop(2)
+    print(sl.display_all())
+    assert elem == 'e'
+    assert sl.head.v == 'b'
+    assert sl.tail.v == 'd'
+    assert sl.display_all() == "H:b - ['b' -> 'd'] - T:d"
+    print('test_pop_n Pass') 
+
+def test_peek_n():
+    sl = sample_test_list()    
+    elem = sl.peek(2)
+    print(sl.display_all())
+    assert elem == 'c'
+    elem = sl.peek(0)
+    assert elem == 'a'
+    elem = sl.peek(4)
+    assert elem == 'e'
+    assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'd' -> 'e'] - T:e"
+    print('test_peek_n Pass')
+
+
+def test_fail_pop_at_location():
+    sl = sample_test_list()
+    try:
+        sl.pop(6)
+        print(f'test_fail_pop_at_location Failed. Missing expected Exception')
+    except Exception as e:
+        assert 'Error' in str(e), f'Expected to return Error'
+        print(f'test_fail_pop_at_location PASS. Expected Exception: "{e}"')
+
 
 
 
@@ -156,13 +250,16 @@ test_insert_end_n_items_single_list()
 test_iterate_linked_list()
 test_insert_at_location()
 test_fail_insert_at_location()
-test_insert_at_head()
+test_pop()
+test_peek()
+test_pop_n()
+test_peek_n()
+test_fail_pop_at_location()
+
+
+
 
 # TODOs:
-# test_pop() #get and delete tail
-# test_peek() #return tail
-# test_pop(n) #get and delete at location n
-# test_peek(n) #return value at location n
 # test_search(v) #return True if v exists
 # test_clean() # delete all the list
 
