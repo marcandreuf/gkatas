@@ -91,6 +91,21 @@ class SingleLnkdList:
             node = self._get_node_at_position(position+1)
             return node.v
 
+    def find(self, value):
+        pos = 0
+        node = self.head
+        while node:
+            if node.v == value:
+                return pos
+            else:
+                node = node.next
+                pos += 1
+        return -1
+
+    def delete_all(self):
+        self.head = None
+        self.tail = None
+        
 
     def display(self):
         result = "["
@@ -115,14 +130,14 @@ class SingleLnkdList:
 
 def test_create_empty_single_list():
     sl = SingleLnkdList()
-    print(sl.display())
+    #print(sl.display())
     assert sl.display() == "[]"
     print("test_create_empty_single_list Pass")
 
 def test_insert_end_one_item_single_list():
     sl = SingleLnkdList()
     sl.insert('a')
-    print(sl.display())
+    #print(sl.display())
     assert sl.display() == "['a']"
     print("test_insert_end_one_item_single_list Pass")
 
@@ -130,7 +145,7 @@ def test_insert_end_n_items_single_list():
     sl = SingleLnkdList()
     sl.insert('a')
     sl.insert('b')
-    print(sl.display())
+    #print(sl.display())
     assert sl.display() == "['a' -> 'b']"
     assert sl.head.v == 'a'
     assert sl.tail.v == 'b'
@@ -138,7 +153,7 @@ def test_insert_end_n_items_single_list():
     sl.insert('c')
     sl.insert('d')
     sl.insert('e')
-    print(sl.display_all())
+    #print(sl.display_all())
     assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'd' -> 'e'] - T:e"
     assert sl.head.v == 'a'
     assert sl.tail.v == 'e'
@@ -155,19 +170,19 @@ def sample_test_list():
 
 def test_iterate_linked_list():
     sl = sample_test_list()
-    print([node.v for node in sl])
+    #print([node.v for node in sl])
     print("test_iterate_linked_list Pass")
 
 def test_insert_at_location():
     sl = sample_test_list()
     sl.insert('f', 3)
-    print(sl.display_all())
+    #print(sl.display_all())
     assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'f' -> 'd' -> 'e'] - T:e"
     sl.insert('g', 0)
-    print(sl.display_all())
+    #print(sl.display_all())
     assert sl.display_all() == "H:g - ['g' -> 'a' -> 'b' -> 'c' -> 'f' -> 'd' -> 'e'] - T:e"
     sl.insert('h', 7)
-    print(sl.display_all())
+    #print(sl.display_all())
     assert sl.display_all() == "H:g - ['g' -> 'a' -> 'b' -> 'c' -> 'f' -> 'd' -> 'e' -> 'h'] - T:h"
     print("test_insert_at_location Pass")
 
@@ -185,7 +200,7 @@ def test_pop():
     sl = sample_test_list()
     elem = sl.pop()
     assert elem == 'e'
-    print(sl.display_all())
+    #print(sl.display_all())
     assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'd'] - T:d"
     print('test_pop Pass')
 
@@ -200,19 +215,19 @@ def test_pop_n():
     sl = sample_test_list()
     
     elem = sl.pop(2)
-    print(sl.display_all())
+    #print(sl.display_all())
     assert elem == 'c'
     assert sl.tail.v == 'e'
     assert sl.display_all() == "H:a - ['a' -> 'b' -> 'd' -> 'e'] - T:e"
     
     elem = sl.pop(0)
-    print(sl.display_all())
+    #print(sl.display_all())
     assert elem == 'a'
     assert sl.head.v == 'b'
     assert sl.display_all() == "H:b - ['b' -> 'd' -> 'e'] - T:e"
     
     elem = sl.pop(2)
-    print(sl.display_all())
+    #print(sl.display_all())
     assert elem == 'e'
     assert sl.head.v == 'b'
     assert sl.tail.v == 'd'
@@ -222,7 +237,7 @@ def test_pop_n():
 def test_peek_n():
     sl = sample_test_list()    
     elem = sl.peek(2)
-    print(sl.display_all())
+    #print(sl.display_all())
     assert elem == 'c'
     elem = sl.peek(0)
     assert elem == 'a'
@@ -241,8 +256,20 @@ def test_fail_pop_at_location():
         assert 'Error' in str(e), f'Expected to return Error'
         print(f'test_fail_pop_at_location PASS. Expected Exception: "{e}"')
 
+def test_search():
+    sl = sample_test_list()
+    assert sl.find('b') == 1
+    assert sl.find('a') == 0
+    assert sl.find('e') == 4
+    assert sl.find('i') == -1
+    print('test_search Pass')
 
-
+def test_delete_list():
+    sl = sample_test_list()
+    sl.delete_all()
+    assert sl.head == None
+    assert sl.tail == None
+    print('test_delete_list Pass')
 
 test_create_empty_single_list()
 test_insert_end_one_item_single_list()
@@ -255,12 +282,6 @@ test_peek()
 test_pop_n()
 test_peek_n()
 test_fail_pop_at_location()
-
-
-
-
-# TODOs:
-# test_search(v) #return True if v exists
-# test_clean() # delete all the list
-
+test_search()
+test_delete_list()
 
