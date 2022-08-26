@@ -35,10 +35,7 @@ class SingleLnkdList:
             self.head = node
             self.tail = node
         else:
-            tmp_n = self.head
-            while tmp_n.next:
-                tmp_n = tmp_n.next
-            tmp_n.next = node
+            self.tail.next = node
             self.tail = node
 
 
@@ -170,7 +167,7 @@ def sample_test_list():
 
 def test_iterate_linked_list():
     sl = sample_test_list()
-    #print([node.v for node in sl])
+    print([node.v for node in sl])
     print("test_iterate_linked_list Pass")
 
 def test_insert_at_location():
