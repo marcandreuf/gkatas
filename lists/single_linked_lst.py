@@ -41,17 +41,13 @@ class SingleLnkdList:
 
     def _get_node_at_position(self, position):
         index = 0
-        size = 0
         node = self.head
-        while node is not None and index < position -1:
+        while node is not None and index < position-1:
+            if node.next is None:
+                raise Exception("Error: position is out of bounds")
             node = node.next
-            if node is not None:
-                size += 1
             index += 1
-        if size < index:
-            raise Exception("Error: position is out of bounds")
-        else:
-            return node
+        return node
 
 
     def pop(self, position = -1):

@@ -26,6 +26,33 @@ class CircSingleLnkdList:
                 self.tail.next = new_node
                 self.tail = new_node
                 new_node.next = self.head
+        elif position == 0:
+            new_node.next = self.head
+            self.head = new_node
+            self.tail.next = new_node
+        else:
+            node = self._get_node_at_position(position)
+            if node == self.tail:
+                self.tail.next = new_node
+                self.tail = new_node
+                new_node.next = self.head
+            else:
+                new_node.next = node.next
+                node.next = new_node
+            
+    
+    def _get_node_at_position(self, position):
+        if position == 0:
+            return self.head
+        index = 1
+        node = self.head.next
+        while index < position-1:
+            if node == self.head:
+                raise Exception("Error: index out of bounds")
+            node = node.next
+            index += 1
+        return node
+   
 
 
     def display_all(self):
@@ -84,10 +111,21 @@ def test_iterate_circ_single_list():
 def test_insert_at_location():
     sl = sample_test_list()
     sl.insert('f', 3)
-    print(sl.display_all())
+    #print(sl.display_all())
     assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'f' -> 'd' -> 'e'] - T:e - T-next:a"
+    sl.insert('g',6)
+    #print(sl.display_all())
+    assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'f' -> 'd' -> 'e' -> 'g'] - T:g - T-next:a"
     print('test_insert_at_location Pass')
 
+def test_fail_insert_at_location():
+    sl = sample_test_list()
+    try:
+        sl.insert('z', 10)
+        print('test_fail_insert_at_location Fial. Missing expected Exception')
+    except Exception as e:
+        assert 'Error' in str(e), f'Excpected to return Error'
+        print(f'test_fail_insert_at_location PASS. Expected Exception: "{e}"')
 
 
 test_create_empty_circ_single_list()
@@ -95,7 +133,7 @@ test_insert_at_end_circ_single_list()
 test_insert_at_end_n_items_circ_single_list()
 test_iterate_circ_single_list()
 test_insert_at_location()
-#test_fail_insert_at_location()
+test_fail_insert_at_location()
 #test_pop()
 #test_peek()
 #test_pop_n()
