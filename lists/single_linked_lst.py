@@ -115,7 +115,7 @@ class SingleLnkdList:
 
     def display_all(self):
         if self.head == None:
-            return ""
+            return "[]"
         else:
             return f"H:{self.head.v} - {self.display()} - T:{self.tail.v}"
 
@@ -124,7 +124,9 @@ class SingleLnkdList:
 def test_create_empty_single_list():
     sl = SingleLnkdList()
     #print(sl.display())
+    #print(sl.display_all())
     assert sl.display() == "[]"
+    assert sl.display_all() == "[]"
     print("test_create_empty_single_list Pass")
 
 def test_insert_end_one_item_single_list():
