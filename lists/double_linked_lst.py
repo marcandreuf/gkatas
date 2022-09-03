@@ -59,21 +59,61 @@ class DoubleLnkdList:
             raise Exception("Error: position is out of bounds")
         return node
 
-    def pop(self):
-        node = self.tail
-        if node == self.head:
-            ret = node.v
-            self.head = None
-            self.tail = None
+    def pop(self, position=-1):
+        if position == -1:                
+            node = self.tail
+            if node == self.head:
+                ret = node.v
+                self.head = None
+                self.tail = None
+            else:
+                ret = self.tail.v
+                self.tail = self.tail.prev
+                self.tail.next = None
+        elif position == 1:
+            ret = self.head.v
+            self.head = self.head.next
+            self.head.prev = None
         else:
-            ret = self.tail.v
-            self.tail = self.tail.prev
-            self.tail.next = None
-            
+            node = self._get_node_at_position(position)
+            ret = node.v
+            if node == self.tail:
+                self.tail = node.prev
+                self.tail.next = None
+            else:
+                node.prev.next = node.next
+                node.next.prev = node.prev
         return ret
 
-    def peek(self):
-        return self.tail.v
+
+    def peek(self, position=-1):
+        if position == -1:
+            return self.tail.v
+        else:
+            node = self._get_node_at_position(position)
+            return node.v
+
+    def find(self, value):
+        node = self.head
+        index = 0
+        while node:
+            if node.v == value:
+                return index+1
+            index +=1
+            node = node.next
+        return -1
+
+
+    def delete_all(self):
+        node = self.head
+        while node:
+            node.prev = None
+            node = node.next
+
+        self.head = None
+        self.tail = None
+
+
 
     def display_all(self):
         if self.head == None:
@@ -105,7 +145,7 @@ def test_create_empty_double_lnkd_list():
 def test_insert_end_one_item_double_lnkd_list():
     dl = DoubleLnkdList()
     dl.insert('a')
-    print(dl.display_all())
+    #print(dl.display_all())
     assert dl.display_all() == "H=a ['-:a:-'] T=a"
     print('test_insert_end_one_item_double_lnkd_list Pass')
 
@@ -115,7 +155,7 @@ def test_insert_end_n_items_double_lnkd_list():
     dl.insert('a')
     dl.insert('b')
     dl.insert('c')
-    print(dl.display_all())
+    #print(dl.display_all())
     assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:c' -> 'b:c:-'] T=c"
     print('test_insert_end_n_items_double_lnkd_list Pass')
 
@@ -136,16 +176,16 @@ def test_iterate_linked_list():
 
 def test_insert_at_location():
     dl = sample_test_list()
-    print(dl.display_all())
+    #print(dl.display_all())
     assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:c' -> 'b:c:d' -> 'c:d:e' -> 'd:e:-'] T=e"
     dl.insert('f', 3)
-    print(dl.display_all())
+    #print(dl.display_all())
     assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:f' -> 'b:f:c' -> 'f:c:d' -> 'c:d:e' -> 'd:e:-'] T=e"
     dl.insert('g', 0)
-    print(dl.display_all())
+    #print(dl.display_all())
     assert dl.display_all() == "H=g ['-:g:a' -> 'g:a:b' -> 'a:b:f' -> 'b:f:c' -> 'f:c:d' -> 'c:d:e' -> 'd:e:-'] T=e"
     dl.insert('h', 8)
-    print(dl.display_all())
+    #print(dl.display_all())
     assert dl.display_all() == "H=g ['-:g:a' -> 'g:a:b' -> 'a:b:f' -> 'b:f:c' -> 'f:c:d' -> 'c:d:e' -> 'd:e:h' -> 'e:h:-'] T=h"
     print('test_insert_at_location PASS')
     
@@ -181,12 +221,82 @@ def test_peek():
 
 def test_pop_n():
     dl = sample_test_list()
+    
     elem = dl.pop(3)
+    #print(dl.display_all())
     assert elem == 'c'
-    assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:d' -> 'c:d:e' -> 'd:e:-'] T=e"
-    #TODO. test pop at head 0 
-    #TODO. test pop at tail 3
+    assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:d' -> 'b:d:e' -> 'd:e:-'] T=e"
+    
+    elem = dl.pop(1)
+    #print(dl.display_all())
+    assert elem == 'a'
+    assert dl.display_all() == "H=b ['-:b:d' -> 'b:d:e' -> 'd:e:-'] T=e"
+    
+    elem = dl.pop(3)
+    #print(dl.display_all())
+    assert elem == 'e'
+    assert dl.display_all() == "H=b ['-:b:d' -> 'b:d:-'] T=d"    
+   
+    elem = dl.pop(2)
+    #print(dl.display_all())
+    assert elem == 'd'
+    assert dl.display_all() == "H=b ['-:b:-'] T=b"    
     print('test_pop_n PASS')
+
+
+def test_peek_n():
+    dl = sample_test_list()
+    
+    elem = dl.peek(3)
+    #print(f'Elem: {elem}')
+    assert elem == 'c'
+    
+    elem = dl.peek(1)
+    #print(f'Elem: {elem}')
+    assert elem == 'a'
+    
+    elem = dl.peek(5)
+    #print(f'Elem: {elem}')
+    assert elem == 'e'
+    assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:c' -> 'b:c:d' -> 'c:d:e' -> 'd:e:-'] T=e"
+    
+    print('test_peek_n PASS')
+
+
+def test_fail_pop_at_location():
+    dl = sample_test_list()
+    try:
+        dl.pop(6)
+        print('test_fail_pop_at_location Failed. Expected Error Exception')
+    except Exception as e:
+        assert 'Error' in str(e), 'Expected to raise Exception'
+        print(f'test_fail_pop_at_location PASS. Expected Exception: "{e}"')
+
+
+def test_search():
+    dl = sample_test_list()
+    pos = dl.find('d')
+    assert pos == 4
+
+    pos = dl.find('a')
+    assert pos == 1
+
+    pos = dl.find('e')
+    assert pos == 5
+
+    pos = dl.find('x')
+    assert pos == -1
+
+    print('test_search PASS.')
+
+
+def test_delete_list():
+    dl = sample_test_list()
+    dl.delete_all()
+    assert dl.head == None
+    assert dl.tail == None
+    assert dl.display_all() == "[]"
+    print('test_delete_list PASS')
 
 
 test_create_empty_double_lnkd_list()
@@ -198,8 +308,8 @@ test_fail_insert_at_location()
 test_pop()
 test_peek()
 test_pop_n()
-#test_peek_n()
-#test_fail_pop_at_location()
-#test_search()
-#test_delete_list()
+test_peek_n()
+test_fail_pop_at_location()
+test_search()
+test_delete_list()
 
