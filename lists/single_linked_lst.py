@@ -51,7 +51,7 @@ class SingleLnkdList:
 
 
     def pop(self, position = -1):
-        if position == -1:
+        if position == -1:            
             return self._pop_tail()
         elif position == 0:
             tmp_node = self.head
@@ -68,11 +68,16 @@ class SingleLnkdList:
 
     def _pop_tail(self):
         node = self.head
-        while node.next != self.tail:
-            node = node.next
-        ret = self.tail.v
-        self.tail = node
-        node.next = None
+        if node == self.tail:
+            ret = node.v
+            self.head = None
+            self.tail = None
+        else:
+            while node.next != self.tail:
+                node = node.next
+            ret = self.tail.v
+            self.tail = node
+            node.next = None
         return ret
 
     def peek(self, position = -1):
@@ -197,6 +202,12 @@ def test_pop():
     assert elem == 'e'
     #print(sl.display_all())
     assert sl.display_all() == "H:a - ['a' -> 'b' -> 'c' -> 'd'] - T:d"
+    
+    sl = SingleLnkdList()
+    sl.insert('a')
+    elem = sl.pop()
+    assert elem == 'a'
+    assert sl.display_all() == "[]"
     print('test_pop Pass')
 
 def test_peek():

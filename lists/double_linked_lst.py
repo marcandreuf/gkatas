@@ -59,6 +59,21 @@ class DoubleLnkdList:
             raise Exception("Error: position is out of bounds")
         return node
 
+    def pop(self):
+        node = self.tail
+        if node == self.head:
+            ret = node.v
+            self.head = None
+            self.tail = None
+        else:
+            ret = self.tail.v
+            self.tail = self.tail.prev
+            self.tail.next = None
+            
+        return ret
+
+    def peek(self):
+        return self.tail.v
 
     def display_all(self):
         if self.head == None:
@@ -135,21 +150,54 @@ def test_insert_at_location():
     print('test_insert_at_location PASS')
     
 
-#def test_fail_insert_at_location():
-#    dl = sample_test_list()
-#    try:
-#        dl.insert(
-#
+def test_fail_insert_at_location():
+    dl = sample_test_list()
+    try:
+        dl.insert('i',7)
+        print('test_fail_insert_at_location Failed. Missing expected Exception')
+    except Exception as e:
+        assert 'Error' in str(e), 'Expected to raise Exception'
+        print(f'test_fail_insert_at_location PASS. Expected Exception: "{e}"')
+
+def test_pop():
+    dl = sample_test_list()
+    elem = dl.pop()
+    assert elem == 'e'
+    assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:c' -> 'b:c:d' -> 'c:d:-'] T=d"
+    
+    dl = DoubleLnkdList()
+    dl.insert('a')
+    elem = dl.pop()
+    assert elem == 'a'
+    assert dl.display_all() == "[]"
+    print('test_pop PASS')
+
+def test_peek():
+    dl = sample_test_list()
+    elem = dl.peek()
+    assert elem == 'e'
+    assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:c' -> 'b:c:d' -> 'c:d:e' -> 'd:e:-'] T=e"
+    print('test_peek PASS')
+
+def test_pop_n():
+    dl = sample_test_list()
+    elem = dl.pop(3)
+    assert elem == 'c'
+    assert dl.display_all() == "H=a ['-:a:b' -> 'a:b:d' -> 'c:d:e' -> 'd:e:-'] T=e"
+    #TODO. test pop at head 0 
+    #TODO. test pop at tail 3
+    print('test_pop_n PASS')
+
 
 test_create_empty_double_lnkd_list()
 test_insert_end_one_item_double_lnkd_list()
 test_insert_end_n_items_double_lnkd_list()
 test_iterate_linked_list()
 test_insert_at_location()
-#test_fail_insert_at_location()
-#test_pop()
-#test_peek()
-#test_pop_n()
+test_fail_insert_at_location()
+test_pop()
+test_peek()
+test_pop_n()
 #test_peek_n()
 #test_fail_pop_at_location()
 #test_search()
