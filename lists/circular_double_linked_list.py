@@ -81,6 +81,28 @@ class CircDoubleLnkdList:
             node = self._get_node_at_position(position)
             return node.v
 
+    def find(self, value):
+        if self.head == None:
+            return -1
+        else:
+            node = self.head
+            if node.v == value:
+                return 1
+            node = node.next
+            index = 2
+            while node is not self.head:
+                if node.v == value:
+                    return index
+                index += 1
+                node = node.next
+            return -1
+
+    def delete_all(self):
+        self.tail.next = None
+        self.head.prev = None
+        self.head = None
+        self.tail = None
+
 
     def _get_node_at_position(self, position):
         index = 0
@@ -88,7 +110,7 @@ class CircDoubleLnkdList:
         while node is not self.tail and index < position-1:
             node = node.next
             index += 1
-        if position > index+2:
+        if position < 1 or position > index+2:
             raise Exception("Error: position is out of bounds")
         return node
 
@@ -252,6 +274,34 @@ def test_peek_n():
     assert f"{cdl}" == "H=a ['e:a:b' -> 'a:b:c' -> 'b:c:d' -> 'c:d:e' -> 'd:e:a'] T=e"
     print('test_peek_n PASS')
 
+def test_fail_pop_at_location():
+    try:
+        cdl = sample_list()
+        elem = cdl.pop(0)
+        print(elem)
+        print('test_fail_pop_at_location Failed. Expected Exception error')
+    except Exception as e:
+        assert 'Error' in str(e), 'Expected Exception Error'
+        print('test_fail_pop_at_location PASS') 
+
+def test_search():
+    cdl = sample_list()
+    pos = cdl.find('c')
+    assert pos == 3
+    pos = cdl.find('a')
+    assert pos == 1
+    pos = cdl.find('e')
+    assert pos == 5
+    pos = cdl.find('i')
+    assert pos == -1
+    print('test_search PASS')
+
+
+def test_delete_list():
+    cdl = sample_list()
+    cdl.delete_all()
+    assert f"{cdl}" == '[]'
+    print('test_delete_list PASS')
 
 test_create_empty_circ_double_lnkd_list()
 test_insert_end_one_item_circ_double_lnkd_list()
@@ -263,7 +313,7 @@ test_pop()
 test_peek()
 test_pop_n()
 test_peek_n()
-#test_fail_pop_at_location()
-#test_search()
-#test_delete_list()
-#
+test_fail_pop_at_location()
+test_search()
+test_delete_list()
+
