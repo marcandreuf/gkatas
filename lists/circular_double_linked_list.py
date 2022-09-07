@@ -42,7 +42,46 @@ class CircDoubleLnkdList:
                 new_node.prev = node.prev
                 node.prev = new_node
                 new_node.prev.next = new_node
-        
+       
+    def pop(self, position=-1):
+        if position == -1:
+            return self._pop_tail()
+        elif position == 1:
+            ret_value = self.head.v
+            self.head = self.head.next
+            self.head.prev = self.tail
+            self.tail.next = self.head
+            return ret_value
+        else:
+            node = self._get_node_at_position(position)
+            if node == self.tail:
+                return self._pop_tail()
+            else:
+                ret_value = node.v
+                node.prev.next = node.next
+                node.next.prev = node.prev
+                return ret_value
+
+
+        return ret_value
+
+    def _pop_tail(self):
+        ret_value = self.tail.v
+        self.tail = self.tail.prev
+        self.tail.next = self.head
+        self.head.prev = self.tail
+        return ret_value
+
+    def peek(self, position=-1):
+        if position == -1:
+            return self.tail.v
+        elif position == 1:
+            return self.head.v
+        else:
+            node = self._get_node_at_position(position)
+            return node.v
+
+
     def _get_node_at_position(self, position):
         index = 0
         node = self.head
@@ -163,6 +202,56 @@ def test_fail_insert_at_location():
         print('test_fail_insert_at_location PASS. Expected Exception: "{e}"')
 
 
+def test_pop():
+    cdl = sample_list()
+    elem = cdl.pop()
+    print(cdl)
+    assert elem == 'e'
+    assert f"{cdl}" == "H=a ['d:a:b' -> 'a:b:c' -> 'b:c:d' -> 'c:d:a'] T=d"
+    print('test_pop PASS')
+
+def test_peek():
+    cdl = sample_list()
+    elem = cdl.peek()
+    print(cdl)
+    assert elem == 'e'
+    assert f"{cdl}" == "H=a ['e:a:b' -> 'a:b:c' -> 'b:c:d' -> 'c:d:e' -> 'd:e:a'] T=e"
+    print('test_peek PASS')
+
+
+def test_pop_n():
+    cdl = sample_list()
+    elem = cdl.pop(3)
+    print(cdl)
+    assert elem == 'c'
+    assert f"{cdl}" == "H=a ['e:a:b' -> 'a:b:d' -> 'b:d:e' -> 'd:e:a'] T=e"
+    
+    print('cdl pop 1')
+    elem = cdl.pop(1)
+    print(cdl)
+    assert elem == 'a'
+    assert f"{cdl}" == "H=b ['e:b:d' -> 'b:d:e' -> 'd:e:b'] T=e"
+    
+    print('cdl pop 3')
+    elem = cdl.pop(3)
+    print(cdl)
+    assert elem == 'e'
+    assert f"{cdl}" == "H=b ['d:b:d' -> 'b:d:b'] T=d"
+    print('test_pop_n PASS')
+
+
+def test_peek_n():
+    cdl = sample_list()
+    elem = cdl.peek(3)
+    print(cdl)
+    assert elem == 'c'
+    elem = cdl.peek(1)
+    assert elem == 'a'
+    elem = cdl.peek(5)
+    assert elem == 'e'
+    assert f"{cdl}" == "H=a ['e:a:b' -> 'a:b:c' -> 'b:c:d' -> 'c:d:e' -> 'd:e:a'] T=e"
+    print('test_peek_n PASS')
+
 
 test_create_empty_circ_double_lnkd_list()
 test_insert_end_one_item_circ_double_lnkd_list()
@@ -170,10 +259,10 @@ test_insert_end_n_items_circ_double_lnkd_list()
 test_iterate_circ_double_lnkd_list()
 test_insert_at_location()
 test_fail_insert_at_location()
-#test_pop()
-#test_peek()
-#test_pop_n()
-#test_peek_n()
+test_pop()
+test_peek()
+test_pop_n()
+test_peek_n()
 #test_fail_pop_at_location()
 #test_search()
 #test_delete_list()
