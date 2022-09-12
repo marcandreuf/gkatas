@@ -10,9 +10,12 @@ class Node:
         return str(self.value)
 
 class LinkedList:
-    def __init__(self):
+    def __init__(self, values=None):
         self.head = None
         self.tail = None
+        if values is not None:
+            for v in values:
+                self.add(v)
 
     
     def __iter__(self):
@@ -23,7 +26,7 @@ class LinkedList:
 
     def __str__(self):
         values = [str(x.value) for x in self]
-        return ' -> '.join(values)
+        return f"[{' -> '.join(values)}]"
 
     def __len__(self):
         result = 0
