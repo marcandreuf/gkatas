@@ -46,7 +46,15 @@ class LinkedList:
             self.tail = new_node
         return self.tail
 
-
+    def add_head(self, value):
+        new_node = Node(value)
+        if self.head is None:
+            self.head = new_node
+            self.tail = new_node
+        else:
+            new_node.next = self.head
+            self.head = new_node
+            
     def generate(self, n, min_value, max_value):
         self.head = None
         self.tail = None
@@ -69,12 +77,23 @@ def test_add():
     ll.add(6)
     print(ll)
     assert len(ll) == 6
-    print('test_generate PASS')
+    print('test_add PASS')
     
+
+def test_add_head():
+    ll = LinkedList()
+    ll.generate(3, 10, 20)
+    print(ll)
+    assert ll.head != 50
+    ll.add_head(50)
+    print(ll)    
+    assert ll.head.value == 50
+    print("test_add_head PASS")
 
 if __name__ == "__main__":
     test_generate()
     test_add()
+    test_add_head()
 
 
 
