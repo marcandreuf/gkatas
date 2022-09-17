@@ -62,6 +62,11 @@ class LinkedList:
             self.add(randint(min_value, max_value))
         return self
 
+    def join(self, ll):
+        self.tail.next = ll.head
+        self.tail = ll.tail
+        return self
+
 
 def test_generate():
     ll = LinkedList().generate(5, 10, 20)
@@ -90,10 +95,24 @@ def test_add_head():
     assert ll.head.value == 50
     print("test_add_head PASS")
 
+
+def test_join_lists():
+    l1 = LinkedList([1,2,3])
+    l2 = LinkedList([4,5,6])
+    l3 = l1.join(l2)
+    assert f"{l3}" == "[1 -> 2 -> 3 -> 4 -> 5 -> 6]"
+    n = l3.head
+    for i in range(3):
+        n = n.next
+    assert l2.head is n
+    assert l3.head is l1.head 
+    assert l3.tail is l2.tail
+
+
 if __name__ == "__main__":
     test_generate()
     test_add()
     test_add_head()
-
+    test_join_lists()
 
 
