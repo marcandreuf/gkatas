@@ -5,3 +5,10 @@ Based on the Udemy course [The Complete Data Structures and Algorithms Course in
 
 Data Structures and Algorithms from Zero to Hero and Crack Top Companies 100+ Interview questions (Python Coding)
 
+Setup the python virtual environment. i.e Using Pyenv
+
+Run code with:
+```shell
+python -m <package>.<module>
+```
+
