@@ -67,6 +67,13 @@ class LinkedList:
         self.tail = ll.tail
         return self
 
+    def pop_head(self):
+        if self.head is None:
+            return None
+        ret = self.head.value
+        self.head = self.head.next
+        return ret
+
 
 def test_generate():
     ll = LinkedList().generate(5, 10, 20)
@@ -107,6 +114,18 @@ def test_join_lists():
     assert l2.head is n
     assert l3.head is l1.head 
     assert l3.tail is l2.tail
+    print("test_join_lists PASS")
+
+def test_pop_head():
+    l1 = LinkedList([1,2,3])
+    e = l1.pop_head()
+    assert e == 1
+    assert l1.tail.value == 3
+    assert l1.head.value == 2
+    l2 = LinkedList()
+    e = l2.pop_head()
+    assert e is None
+    print("test_pop_head PASS")
 
 
 if __name__ == "__main__":
@@ -114,5 +133,5 @@ if __name__ == "__main__":
     test_add()
     test_add_head()
     test_join_lists()
-
+    test_pop_head()
 
