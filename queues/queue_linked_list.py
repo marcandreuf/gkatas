@@ -40,28 +40,64 @@ class QueueLinkList:
             self.ll.tail.next = newNode
             self.ll.tail = newNode
 
+    def isEmpty(self):
+        return True if self.ll.head == None else False
+
+    def dequeue(self):
+        if self.isEmpty():
+            return None
+        else:
+            ret = self.ll.head.value
+            self.ll.head = self.ll.head.next
+            return ret
+
+    def delete(self):
+        self.ll.head = None
+        self.ll.tail = None
+
 def test_empty_queue():
     q = QueueLinkList()
-    print(q)
     assert q.ll.head == None
+    assert q.isEmpty(), 'Expecting to be empty queue'
     print("test_empty_queue PASS")
 
 def test_enqueue():
     q = QueueLinkList()
     q.enqueue(1)
-    print(q)
     assert q.ll.head != None
     assert f"{q}" == "[1]"
-    
     q.enqueue(2)
-    print(q)
     assert f"{q}" == "[1:2]"
-
     q.enqueue(3)
-    print(q)
     assert f"{q}" == "[1:2:3]"
-    
     print("test_enqueue PASS")
+
+
+def test_dequeue():
+    q = QueueLinkList()
+    q.enqueue(1)
+    q.enqueue(2)
+    q.enqueue(3)
+    assert f"{q}" == "[1:2:3]"
+    e = q.dequeue()
+    assert e == 1
+    assert f"{q}" == "[2:3]"
+    q.dequeue()
+    q.dequeue()
+    e = q.dequeue()
+    assert e == None
+    print("test_dequeue PASS")
+
+def test_delete():
+    q = QueueLinkList()
+    q.enqueue(1)
+    q.enqueue(2)
+    q.enqueue(3)
+    q.delete()
+    assert q.isEmpty()
+    print("test_delete PASS")
 
 test_empty_queue()
 test_enqueue()
+test_dequeue()
+test_delete()
