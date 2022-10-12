@@ -1,6 +1,4 @@
 # Proof of concept
-# TODO implement all tests and refactor the code
-
 class Node:
     def __init__(self, value, min_value):
         self.value = value
@@ -16,6 +14,9 @@ class Node:
 class MinStack:
     def __init__(self):
         self.head = None
+
+    def isEmpty(self):
+        return self.head == None
 
     def min(self):
         return self.head.min if self.head else None
@@ -38,23 +39,38 @@ class MinStack:
             return ret
 
 
-s = MinStack()
-s.push(5)
-print(s.head)
-print(s.min())
-print("---")
-s.push(6)
-print(s.head)
-print(s.min())
-print("---")
-s.push(3)
-print(s.head)
-print(s.min())
-print("---")
-e = s.pop()
-print(e)
-print(s.head)
-print(s.min())
-            
+def test_create_min_stack():
+    s = MinStack()
+    assert s.isEmpty()
+    print("test_create_min_stack PASS")
 
+def test_push_min():
+    s = MinStack()
+    s.push(5)
+    assert s.min() == 5
+    s.push(6)
+    assert s.min() == 5
+    s.push(3)
+    assert s.min() == 3
+    s.push(1)
+    assert s.min() == 1
+    print("test_push_min PASS")
 
+def test_pop_min():
+    s = MinStack()
+    s.push(5)
+    s.push(6)
+    s.push(3)
+    s.push(1)
+    assert s.min() == 1
+    e = s.pop()
+    assert e == 1
+    assert s.min() == 3
+    e = s.pop()
+    assert e == 3
+    assert s.min() == 5
+    print("test_pop_min PASS")
+
+test_create_min_stack()
+test_push_min()
+test_pop_min()

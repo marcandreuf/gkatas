@@ -138,6 +138,9 @@ def test_pop_stack_n():
     e = ms.pop(2)
     assert e == None
     assert f"{ms}" == "[0,0,0,0,0,0,0,0,0] - 0:0:0"
+    assert ms.isEmptyStack(0) is True
+    assert ms.isEmptyStack(1) is True
+    assert ms.isEmptyStack(2) is True
 
     print("test_pop_stack_n PASS")
 
