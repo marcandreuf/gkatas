@@ -84,23 +84,26 @@ class TreeNode:
                 q.enqueue(n.left)
             if n.right:
                 q.enqueue(n.right)
-        return n.data
+        return n
 
     def delete(self, value):
         del_node = None
         q = QueueLinkList()
         q.enqueue(self)
+        deepest = self.getDeepest()
         while not(q.isEmpty()):
             n = q.dequeue()
-            if n.data == value:
-                del_node = n
-            if n.left:
-                q.enqueue(n.left)
-            if n.right:
-                q.enqueue(n.right)
-        deepest = n
-        del_node.data = value
-
+            if n is not None: 
+                if n.data == value:
+                    n.data = deepest.data
+                if n.left == deepest:
+                    n.left = None
+                else:                
+                    q.enqueue(n.left)
+                if n.right == deepest:
+                    n.right = None
+                else:
+                    q.enqueue(n.right)
 
 
     def isEmpty(self):
@@ -172,7 +175,7 @@ def test_insert_levelorder():
 def test_get_deepest_node():
     bt = _sample_tree()
     dn = bt.getDeepest()
-    assert dn == 4
+    assert dn.data == 4
     print("test_get_deepest_node PASS")
 
 def test_delete_node():
@@ -189,4 +192,4 @@ test_print_levelorder()
 test_search_levelorder()
 test_insert_levelorder()
 test_get_deepest_node()
-#test_delete_node()
+test_delete_node()
