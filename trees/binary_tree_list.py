@@ -23,6 +23,35 @@ class BinaryTreeList:
                 return True
         return False
 
+    def rec_pre_order(self, index=1):
+        ret = ""
+        if index > self.last:
+            return ""
+        else:
+            ret += f"{self.btlist[index]},"
+            ret += self.rec_pre_order(index*2)
+            ret += self.rec_pre_order(index*2 + 1)
+        return f"[{ret[:-1]}]" if index == 1 else ret
+
+    def iter_pre_order(self):
+        ret = "["
+        for i in range(1, self.last):
+            print(f"-------level {i}-------------")
+            stack = []
+            stack.append(self.btlist[i])
+            while len(stack) > 0:
+                print(f"stack: {stack}")
+                n = stack.pop()
+                print(f"poped: {n}")
+                ret += f"{n},"
+                l_index = i*2
+                r_index = i*2+1
+                if self.btlist[r_index] is not None:
+                    stack.append(self.btlist[r_index])
+                if self.btlist[l_index] is not None:
+                    stack.append(self.btlist[l_index])
+        return ret
+
 def test_isEmpty_bt():
     bt = BinaryTreeList(8)
     assert bt.isEmpty()
@@ -63,8 +92,46 @@ def test_search():
     assert bt.search('d') is False
     print('test_search PASS')
 
+def _traversal_btree():
+    bt = BinaryTreeList(10)
+    bt.insert("1")
+    bt.insert("2")
+    bt.insert("3")
+    bt.insert("4")
+    bt.insert("5")
+    bt.insert("6")
+    bt.insert("7")
+    bt.insert("9")
+    bt.insert("10")
+    return bt
+
+# test pre order traversal
+# Recursive
+def test_pre_order_recursive():
+    bt = _traversal_btree()
+    print(bt.rec_pre_order())
+    assert f"{bt.rec_pre_order()}" == "[1,2,4,9,10,5,3,6,7]"
+    print("test_pre_order_recursive PASS")
+
+# Iterative
+#   While index < EOL
+#       https://inversepalindrome.com/blog/how-to-iteratively-traverse-a-binary-tree
+def test_pre_order_iterative():
+    bt = _traversal_btree()
+    print(bt.iter_pre_order())
+    assert f"{bt.iter_pre_order()}" == "[1,2,4,9,10,5,3,6,7]"
+    print("test_pre_order_iterative PASS")
+    
+
+# test in order traversal
+# test post order traversal
+# test level order traversal
+# test delete node
+
 
 test_isEmpty_bt()
 test_insert()
 test_insert_full()
 test_search()
+test_pre_order_recursive()
+test_pre_order_iterative()
