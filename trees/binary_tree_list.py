@@ -24,33 +24,40 @@ class BinaryTreeList:
         return False
 
     def rec_pre_order(self, index=1):
-        ret = ""
+        ret = []
         if index > self.last:
-            return ""
+            return None
         else:
-            ret += f"{self.btlist[index]},"
-            ret += self.rec_pre_order(index*2)
-            ret += self.rec_pre_order(index*2 + 1)
-        return f"[{ret[:-1]}]" if index == 1 else ret
-
-    def iter_pre_order(self):
-        ret = "["
-        for i in range(1, self.last):
-            print(f"-------level {i}-------------")
-            stack = []
-            stack.append(self.btlist[i])
-            while len(stack) > 0:
-                print(f"stack: {stack}")
-                n = stack.pop()
-                print(f"poped: {n}")
-                ret += f"{n},"
-                l_index = i*2
-                r_index = i*2+1
-                if self.btlist[r_index] is not None:
-                    stack.append(self.btlist[r_index])
-                if self.btlist[l_index] is not None:
-                    stack.append(self.btlist[l_index])
+            ret.append(self.btlist[index])
+            left = self.rec_pre_order(index*2)
+            if left:
+                ret.extend(left)
+            right = self.rec_pre_order(index*2 + 1)
+            if right:
+                ret.extend(right)
         return ret
+
+    def iter_in_order(self):
+        ret = []
+        stack = []
+        curr_index = 1
+
+        while curr_index or stack:
+            while curr_index:
+                stack.append(curr_index)
+                if curr_index*2 <= self.last:
+                    curr_index = curr_index*2
+                else:
+                    curr_index = None
+            curr_index = stack.pop()
+            ret.append(self.btlist[curr_index])
+            if curr_index*2+1 <= self.last:
+                curr_index = curr_index*2+1
+            else:
+                curr_index = None
+                
+        return ret
+
 
 def test_isEmpty_bt():
     bt = BinaryTreeList(8)
@@ -110,17 +117,17 @@ def _traversal_btree():
 def test_pre_order_recursive():
     bt = _traversal_btree()
     print(bt.rec_pre_order())
-    assert f"{bt.rec_pre_order()}" == "[1,2,4,9,10,5,3,6,7]"
+    assert f"{bt.rec_pre_order()}" == "['1', '2', '4', '9', '10', '5', '3', '6', '7']"
     print("test_pre_order_recursive PASS")
 
 # Iterative
 #   While index < EOL
 #       https://inversepalindrome.com/blog/how-to-iteratively-traverse-a-binary-tree
-def test_pre_order_iterative():
+def test_in_order_iterative():
     bt = _traversal_btree()
-    print(bt.iter_pre_order())
-    assert f"{bt.iter_pre_order()}" == "[1,2,4,9,10,5,3,6,7]"
-    print("test_pre_order_iterative PASS")
+    print(bt.iter_in_order())
+    assert f"{bt.iter_in_order()}" == "['9', '4', '10', '2', '5', '1', '6', '3', '7']"
+    print("test_in_order_iterative PASS")
     
 
 # test in order traversal
@@ -134,4 +141,6 @@ test_insert()
 test_insert_full()
 test_search()
 test_pre_order_recursive()
-test_pre_order_iterative()
+#test_pre_order_iterative()
+#test_in_order_recursive()
+test_in_order_iterative()
