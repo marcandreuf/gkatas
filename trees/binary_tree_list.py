@@ -37,6 +37,25 @@ class BinaryTreeList:
                 ret.extend(right)
         return ret
 
+    def iter_pre_order(self):
+        ret = []
+        stack = []
+        stack.append(1)
+        while stack:
+            idx = stack.pop()
+            ret.append(self.btlist[idx])
+            idx_right = idx*2+1
+            idx_right = idx_right if idx_right <= self.last else None
+            if idx_right:
+                stack.append(idx_right)
+            idx_left = idx*2
+            idx_left = idx_left if idx_left <= self.last else None
+            if idx_left:
+                stack.append(idx_left)
+        return ret
+
+
+
     def iter_in_order(self):
         ret = []
         stack = []
@@ -112,28 +131,44 @@ def _traversal_btree():
     bt.insert("10")
     return bt
 
-# test pre order traversal
-# Recursive
 def test_pre_order_recursive():
     bt = _traversal_btree()
     print(bt.rec_pre_order())
     assert f"{bt.rec_pre_order()}" == "['1', '2', '4', '9', '10', '5', '3', '6', '7']"
     print("test_pre_order_recursive PASS")
 
-# Iterative
-#   While index < EOL
-#       https://inversepalindrome.com/blog/how-to-iteratively-traverse-a-binary-tree
+# Iterative algorith reference
+# https://inversepalindrome.com/blog/how-to-iteratively-traverse-a-binary-tree
+
+def test_pre_order_iterative():
+    bt = _traversal_btree()
+    print(bt.iter_pre_order())
+    assert f"{bt.rec_pre_order()}" == "['1', '2', '4', '9', '10', '5', '3', '6', '7']"
+    print("test_pre_order_iterative PASS")
+
+def test_in_order_recursive():
+    print("test_in_order_recursive PENDING")
+
 def test_in_order_iterative():
     bt = _traversal_btree()
     print(bt.iter_in_order())
     assert f"{bt.iter_in_order()}" == "['9', '4', '10', '2', '5', '1', '6', '3', '7']"
     print("test_in_order_iterative PASS")
-    
 
-# test in order traversal
-# test post order traversal
-# test level order traversal
-# test delete node
+def test_post_order_recursive():
+    print("test_post_order_recursive PENDING")
+
+def test_post_order_iterative():
+    print("test_post_order_iterative PENDING")
+
+def test_level_order_recursive():
+    print("test_level_order_recursive PENDING")
+
+def test_level_order_iterative():
+    print("test_level_order_iterative PENDING")
+
+def test_delete_node():
+    print("test_delete_node PENDING")
 
 
 test_isEmpty_bt()
@@ -141,6 +176,12 @@ test_insert()
 test_insert_full()
 test_search()
 test_pre_order_recursive()
-#test_pre_order_iterative()
-#test_in_order_recursive()
+test_pre_order_iterative()
+test_in_order_recursive()
 test_in_order_iterative()
+test_post_order_recursive()
+test_post_order_iterative()
+test_level_order_recursive()
+test_level_order_iterative()
+test_delete_node()
+
