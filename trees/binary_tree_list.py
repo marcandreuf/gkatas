@@ -32,15 +32,44 @@ class BinaryTreeList:
             left = self.rec_pre_order(index*2)
             if left:
                 ret.extend(left)
-            right = self.rec_pre_order(index*2 + 1)
+            right = self.rec_pre_order(index*2+1)
             if right:
                 ret.extend(right)
+        return ret
+
+    def rec_in_order(self, index=1):
+        ret = []
+        if index > self.last:
+            return None
+        else:
+            left = self.rec_in_order(index*2)
+            if left:
+                ret.extend(left)
+            ret.append(self.btlist[index])
+            right = self.rec_in_order(index*2+1)
+            if right:
+                ret.extend(right)
+        return ret
+
+    def rec_post_order(self, index=1):
+        ret = []
+        if index > self.last:
+            return None
+        else:
+            left = self.rec_post_order(index*2)
+            if left:
+                ret.extend(left)
+            right = self.rec_post_order(index*2+1)
+            if right:
+                ret.extend(right)
+            ret.append(self.btlist[index])
         return ret
 
     def iter_pre_order(self):
         ret = []
         stack = []
-        stack.append(1)
+        idx = 1
+        stack.append(idx)
         while stack:
             idx = stack.pop()
             ret.append(self.btlist[idx])
@@ -54,6 +83,25 @@ class BinaryTreeList:
                 stack.append(idx_left)
         return ret
 
+    def iter_post_order(self):
+        ret = []
+        stack = []
+        out_stack = []
+        idx = 1
+        stack.append(idx)
+        while stack:
+            idx = stack.pop()            
+            idx_left = idx*2 if idx*2 <= self.last else None
+            if idx_left:
+                stack.append(idx_left)
+            idx_right = idx*2+1 if idx*2+1 <= self.last else None
+            if idx_right:
+                stack.append(idx_right)
+            out_stack.append(idx)
+        while out_stack:
+            idx = out_stack.pop()
+            ret.append(self.btlist[idx])
+        return ret
 
 
     def iter_in_order(self):
@@ -147,7 +195,10 @@ def test_pre_order_iterative():
     print("test_pre_order_iterative PASS")
 
 def test_in_order_recursive():
-    print("test_in_order_recursive PENDING")
+    bt = _traversal_btree()
+    print(bt.rec_in_order())
+    assert f"{bt.rec_in_order()}" == "['9', '4', '10', '2', '5', '1', '6', '3', '7']"
+    print("test_in_order_recursive PASS")
 
 def test_in_order_iterative():
     bt = _traversal_btree()
@@ -156,15 +207,27 @@ def test_in_order_iterative():
     print("test_in_order_iterative PASS")
 
 def test_post_order_recursive():
-    print("test_post_order_recursive PENDING")
+    bt = _traversal_btree()
+    print(bt.rec_post_order())
+    assert f"{bt.rec_post_order()}" == "['9', '10', '4', '5', '2', '6', '7', '3', '1']"
+    print("test_post_order_recursive PASS")
 
 def test_post_order_iterative():
-    print("test_post_order_iterative PENDING")
+    bt = _traversal_btree()
+    print(bt.iter_post_order())
+    assert f"{bt.iter_post_order()}" == "['9', '10', '4', '5', '2', '6', '7', '3', '1']"
+    print("test_post_order_iterative PASS")
 
 def test_level_order_recursive():
+    #bt = _traversal_btree()
+    #print(bt.rec_level_order())
+    #assert f"{bt.rec_level_order()}" == "['1', '2', '3', '4', '5', '6', '7', '9', '10']"
     print("test_level_order_recursive PENDING")
 
 def test_level_order_iterative():
+    #bt = _traversal_btree()
+    #print(bt.iter_level_order())
+    #assert f"{bt.iter_level_order()}" == "['1', '2', '3', '4', '5', '6', '7', '9', '10']"
     print("test_level_order_iterative PENDING")
 
 def test_delete_node():
