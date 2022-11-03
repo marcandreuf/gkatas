@@ -65,6 +65,19 @@ class BinaryTreeList:
             ret.append(self.btlist[index])
         return ret
 
+    def rec_level_order_list(self):
+        ret = []
+        for idx in range(1, self.last+1):
+            ret.append(self.btlist[idx])
+        return ret
+
+    def rec_level_order(self, index=1):
+        ret = []
+        if index > 0 and index <= self.last:
+            ret.append(self.btlist[index])
+            ret.extend(self.rec_level_order(index+1))
+        return ret
+
     def iter_pre_order(self):
         ret = []
         stack = []
@@ -122,8 +135,35 @@ class BinaryTreeList:
                 curr_index = curr_index*2+1
             else:
                 curr_index = None
-                
         return ret
+
+    def iter_level_order(self):
+        ret = []
+        queue = []
+        idx = 1
+        if len(self.btlist) > 0:
+            queue.append(idx)
+            while queue:
+                idx = queue.pop(0)
+                ret.append(self.btlist[idx])
+                left = idx*2 if idx*2 <= self.last else None
+                right = idx*2+1 if idx*2+1 <= self.last else None
+                if left:
+                    queue.append(left)
+                if right:
+                    queue.append(right)                
+        return ret
+
+    def delete_node(self, value):
+        idx = 1
+        for idx in range(self.last+1):
+            if self.btlist[idx] == str(value):
+                break;
+        self.btlist[idx] = self.btlist[self.last]
+        self.btlist[self.last] = None
+        self.last -= 1
+
+
 
 
 def test_isEmpty_bt():
@@ -219,19 +259,30 @@ def test_post_order_iterative():
     print("test_post_order_iterative PASS")
 
 def test_level_order_recursive():
-    #bt = _traversal_btree()
-    #print(bt.rec_level_order())
-    #assert f"{bt.rec_level_order()}" == "['1', '2', '3', '4', '5', '6', '7', '9', '10']"
-    print("test_level_order_recursive PENDING")
+    bt = _traversal_btree()
+    print(bt.rec_level_order())
+    assert f"{bt.rec_level_order()}" == "['1', '2', '3', '4', '5', '6', '7', '9', '10']"
+    print("test_level_order_recursive PASS")
+
+def test_level_order_list():
+    bt = _traversal_btree()
+    print(bt.rec_level_order_list())
+    assert f"{bt.rec_level_order_list()}" == "['1', '2', '3', '4', '5', '6', '7', '9', '10']"
+    print("test_level_order_list PASS")
+
 
 def test_level_order_iterative():
-    #bt = _traversal_btree()
-    #print(bt.iter_level_order())
-    #assert f"{bt.iter_level_order()}" == "['1', '2', '3', '4', '5', '6', '7', '9', '10']"
-    print("test_level_order_iterative PENDING")
+    bt = _traversal_btree()
+    print(bt.iter_level_order())
+    assert f"{bt.iter_level_order()}" == "['1', '2', '3', '4', '5', '6', '7', '9', '10']"
+    print("test_level_order_iterative PASS")
 
 def test_delete_node():
-    print("test_delete_node PENDING")
+    bt = _traversal_btree()
+    bt.delete_node(3)
+    print(bt)
+    assert f"{bt}" == "[None, '1', '2', '10', '4', '5', '6', '7', '9', None]"
+    print("test_delete_node PASS")
 
 
 test_isEmpty_bt()
@@ -245,6 +296,7 @@ test_in_order_iterative()
 test_post_order_recursive()
 test_post_order_iterative()
 test_level_order_recursive()
+test_level_order_list()
 test_level_order_iterative()
 test_delete_node()
 
