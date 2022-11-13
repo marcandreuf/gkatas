@@ -81,7 +81,6 @@ class AvlNode:
                 else:
                     self.right = AvlNode(value)
                     self.height = 1
-                self.right = AvlNode(value)
 
     def isBalanced(self):
         queue = []
@@ -153,12 +152,14 @@ def test_insert_to_enpty_tree():
     avlt.insert(20)
     print(avlt.prt_hl_order())
     assert f"{avlt.prt_hl_order()}" == "['30(2)', '25(1)', '35(0)', '20(0)']"
+    avlt.insert(33)
+    print(avlt.prt_hl_order())
+    assert f"{avlt.prt_hl_order()}" == "['30(2)', '25(1)', '35(1)', '20(0)', '33(0)']"
     print("test_insert_to_enpty_tree PASS")
 
 
 def test_isBalanced_tree():
-    avlt = AvlNode(None)
-    avlt.insert(30)
+    avlt = AvlNode(30)
     avlt.insert(25)
     avlt.insert(35)
     print(avlt.prt_hl_order())
@@ -166,6 +167,9 @@ def test_isBalanced_tree():
     avlt.insert(20)
     print(avlt.prt_hl_order())
     assert avlt.isBalanced() == False
+    #avlt.insert(33)
+    #print(avlt.prt_hl_order())
+    #assert avlt.isBalanced()
     print("test_isBalanced_tree PASS")
 
 test_create_avl_tree()
