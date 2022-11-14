@@ -61,42 +61,58 @@ class AvlNode:
                 queue.append(e.right)
         return ret
 
-
-
     def insert(self, value):
         if self.data == None:
             self.data = value
         else:
+            lh = 0
+            rh = 0
             if value < self.data:
                 if self.left:
-                    self.left.insert(value)
-                    self.height = self.left.height + 1
+                    self.left = self.left.insert(value)
                 else:
                     self.left = AvlNode(value)
-                    self.height = 1
             if value > self.data:
                 if self.right:
-                    self.right.insert(value)
-                    self.height = self.right.height + 1
+                    self.right = self.right.insert(value)
                 else:
                     self.right = AvlNode(value)
-                    self.height = 1
+            lh = self.left.height + 1 if self.left else 0
+            rh = self.right.height + 1 if self.right else 0
+            self.height = max(lh, rh)
+        if self.isDisbalanced():
+            print(f"Node {self.data} is disbalanced.")
+            #todo recheck disbalanced condition
+            if self.left and self.right == None: #left-left rotation
+                new_root = self.left
+                self.left = self.left.right
+                new_root.right = self
+                lh = self.left.height + 1 if self.left else 0
+                rh = self.right.height + 1 if self.right else 0
+                self.height = max(lh, rh)
+                lh = new_root.left.height + 1 if new_root.left else 0
+                rh = new_root.right.height + 1 if new_root.right else 0
+                new_root.height = max(lh, rh)                
+                return new_root
+        else:
+            return self
+                
 
-    def isBalanced(self):
+    def isDisbalanced(self):
         queue = []
         queue.append(self)
         while queue:
             e = queue.pop(0)
             lh = 0 if e.left == None else e.left.height
             rh = 0 if e.right == None else e.right.height
-            if (e.height > lh+1) or (e.height > rh+1):
-                print(f"{e.height} {lh} {rh}")
-                return False
+            if (e.height > lh+1) or (e.height > rh+1):                
+                print(f"Node {e.data} is disbalanced with heights: {e.height} left: {lh} right: {rh}")
+                return e
             if e.left:
                 queue.append(e.left)
             if e.right:
                 queue.append(e.right)
-        return True
+        return None 
 
 def _sample_avl():
     avlt = AvlNode(30)
@@ -138,13 +154,15 @@ def test_level_order_trav():
     assert f"{avlt.prt_level_order()}" == "[30, 20, 40, 10, 25]"
     print("test_level_order_trav PASS")
 
-def test_insert_to_enpty_tree():
+def test_insert_to_empty_tree():
     avlt = AvlNode(None)
     print(avlt.prt_hl_order())
     assert f"{avlt.prt_hl_order()}" == "['None(0)']"
     avlt.insert(30)
+    print(avlt.prt_hl_order())
     assert f"{avlt.prt_hl_order()}" == "['30(0)']"
     avlt.insert(25)
+    print(avlt.prt_hl_order())
     assert f"{avlt.prt_hl_order()}" == "['30(1)', '25(0)']"
     avlt.insert(35)
     print(avlt.prt_hl_order())
@@ -158,24 +176,37 @@ def test_insert_to_enpty_tree():
     print("test_insert_to_enpty_tree PASS")
 
 
-def test_isBalanced_tree():
+def test_getDisbalanced_tree():
     avlt = AvlNode(30)
     avlt.insert(25)
     avlt.insert(35)
     print(avlt.prt_hl_order())
-    assert avlt.isBalanced()
+    assert avlt.isDisbalanced() == None
     avlt.insert(20)
     print(avlt.prt_hl_order())
-    assert avlt.isBalanced() == False
-    #avlt.insert(33)
-    #print(avlt.prt_hl_order())
-    #assert avlt.isBalanced()
-    print("test_isBalanced_tree PASS")
+    assert avlt.isDisbalanced().data == 30
+    avlt.insert(33)
+    print(avlt.prt_hl_order())
+    assert avlt.isDisbalanced() == None
+    print("test_getDisbalanced_tree PASS")
+
+
+def test_insert_left_left():
+    avlt = AvlNode(30)
+    avlt = avlt.insert(20)
+    avlt = avlt.insert(10)
+    print(avlt.prt_hl_order())
+    assert f"{avlt.prt_hl_order()}" == "['20(1)', '10(0)', '30(0)']"
+    print("test_insert_left_left PASS")
+
+    
 
 test_create_avl_tree()
 test_pre_order_trav()
 test_post_order_trav()
 test_in_order_trav()
 test_level_order_trav()
-test_insert_to_enpty_tree()
-test_isBalanced_tree()
+test_insert_to_empty_tree()
+test_getDisbalanced_tree()
+test_insert_left_left()
+
