@@ -69,27 +69,31 @@ class AvlNode:
             rh = 0
             if value < self.data:
                 if self.left:
-                    self.left = self.left.insert(value)
+                    self.left.insert(value)
                 else:
                     self.left = AvlNode(value)
             if value > self.data:
                 if self.right:
-                    self.right = self.right.insert(value)
+                    self.right.insert(value)
                 else:
                     self.right = AvlNode(value)
             lh = self.left.height + 1 if self.left else 0
             rh = self.right.height + 1 if self.right else 0
             self.height = max(lh, rh)
-        if self.isDisbalanced():
-            print(f"Node {self.data} is disbalanced.")
-            #todo recheck disbalanced condition
-            if self.left and self.right == None: #left-left rotation
-                new_root = self.left
-                self.left = self.left.right
-                new_root.right = self
-                lh = self.left.height + 1 if self.left else 0
-                rh = self.right.height + 1 if self.right else 0
-                self.height = max(lh, rh)
+            
+
+    def rebalance(self):
+        disb_node = self.getDisbalanced()
+        if disb_node:
+            if disb_node.left and disb_node.left.left: #left-left rotation
+                print(f"left {disb_node.left.data}")
+                print(f"left.left {disb_node.left.left.data}")
+                new_root = disb_node.left
+                disb_node.left = disb_node.left.right
+                new_root.right = disb_node
+                lh = disb_node.left.height + 1 if disb_node.left else 0
+                rh = disb_node.right.height + 1 if disb_node.right else 0
+                disb_node.height = max(lh, rh)
                 lh = new_root.left.height + 1 if new_root.left else 0
                 rh = new_root.right.height + 1 if new_root.right else 0
                 new_root.height = max(lh, rh)                
@@ -98,15 +102,15 @@ class AvlNode:
             return self
                 
 
-    def isDisbalanced(self):
+    def getDisbalanced(self):
         queue = []
         queue.append(self)
         while queue:
             e = queue.pop(0)
             lh = 0 if e.left == None else e.left.height
             rh = 0 if e.right == None else e.right.height
-            if (e.height > lh+1) or (e.height > rh+1):                
-                print(f"Node {e.data} is disbalanced with heights: {e.height} left: {lh} right: {rh}")
+            if abs(lh-rh) > 1:                
+                print(f"Node {e.data} is disbalanced with heights: {abs(lh-rh)} left: {lh} right: {rh}")
                 return e
             if e.left:
                 queue.append(e.left)
@@ -173,31 +177,36 @@ def test_insert_to_empty_tree():
     avlt.insert(33)
     print(avlt.prt_hl_order())
     assert f"{avlt.prt_hl_order()}" == "['30(2)', '25(1)', '35(1)', '20(0)', '33(0)']"
-    print("test_insert_to_enpty_tree PASS")
+    print("test_insert_to_empty_tree PASS")
 
 
-def test_getDisbalanced_tree():
+def test_getDisbalanced_node():
     avlt = AvlNode(30)
     avlt.insert(25)
     avlt.insert(35)
     print(avlt.prt_hl_order())
-    assert avlt.isDisbalanced() == None
+    assert avlt.getDisbalanced() == None
     avlt.insert(20)
     print(avlt.prt_hl_order())
-    assert avlt.isDisbalanced().data == 30
-    avlt.insert(33)
+    assert avlt.getDisbalanced() == None
+    avlt.insert(10)
     print(avlt.prt_hl_order())
-    assert avlt.isDisbalanced() == None
-    print("test_getDisbalanced_tree PASS")
+    disb = avlt.getDisbalanced()
+    assert disb != None and disb.data == 30
+    print("test_getDisbalanced_node PASS")
 
 
-def test_insert_left_left():
+def test_rebalance_left_left():
     avlt = AvlNode(30)
-    avlt = avlt.insert(20)
-    avlt = avlt.insert(10)
+    avlt.insert(25)
+    avlt.insert(35)
+    avlt.insert(20)
+    avlt.insert(10)
     print(avlt.prt_hl_order())
-    assert f"{avlt.prt_hl_order()}" == "['20(1)', '10(0)', '30(0)']"
-    print("test_insert_left_left PASS")
+    ravlt = avlt.rebalance()
+    print(ravlt.prt_hl_order())
+    assert f"{ravlt.prt_hl_order()}" == "['25(2)', '20(1)', '30(1)', '10(0)', '35(0)']"
+    print("test_rebalance_left_left PASS")
 
     
 
@@ -207,6 +216,7 @@ test_post_order_trav()
 test_in_order_trav()
 test_level_order_trav()
 test_insert_to_empty_tree()
-test_getDisbalanced_tree()
-test_insert_left_left()
+test_getDisbalanced_node()
+test_rebalance_left_left()
+
 
