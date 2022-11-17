@@ -70,27 +70,31 @@ class AvlNode:
             if value < self.data:
                 if self.left:
                     self.left.insert(value)
+                    self._rebalance()
                 else:
                     self.left = AvlNode(value)
             if value > self.data:
                 if self.right:
                     self.right.insert(value)
+                    self._rebalance()
                 else:
                     self.right = AvlNode(value)
             lh = self.left.height + 1 if self.left else 0
             rh = self.right.height + 1 if self.right else 0
             self.height = max(lh, rh)
             
-
-    def rebalance(self):
-        disb_node = self.getDisbalanced()
-        if disb_node:
-            if disb_node.left and disb_node.left.left:
-                return self._right_rotation(disb_node)
-            if disb_node.left and disb_node.left.right:
-                return self._left_rotation(disb_node)
-        else:
-            return self
+    # Rebalance left and right children. As we can not replace self we need to work with rebalancing the childrens after each new insertion.
+    def _rebalance(self):
+        n = self.left
+        lh = 0 if n.left == None else n.left.height
+        rh = 0 if n.right == None else n.right.height
+        if abs(lh-rh) > 1:
+            print(f"node {n.data} is not balanced")
+            if n.left and n.left.left:
+                self.left = self._right_rotation(n)
+            if n.left and n.left.right:
+                self.left = self._left_rotation(n)
+        #TODO rebalance right node
 
     def _left_rotation(self, disb_node): #left right condition
         print(f"left {disb_node.left.data}")
@@ -111,43 +115,6 @@ class AvlNode:
         return self._update_disb_node(disb_node, new_root)
 
 
-    def _update_disb_node(self, disb_node, new_node):
-        if self == disb_node:
-            return new_node
-        else:
-            queue = []
-            queue.append(self)
-            while queue:
-                e = queue.pop(0)
-                if e.left:
-                    if e.left == disb_node:
-                        e.left = new_node
-                        return self
-                    else:
-                        queue.append(e.left)
-                if e.right:
-                    if e.right == disb_node:
-                        e.right = new_node
-                        return self
-                    else:
-                        queue.append(e.right)
-
-
-    def getDisbalanced(self):
-        queue = []
-        queue.append(self)
-        while queue:
-            e = queue.pop(0)
-            lh = 0 if e.left == None else e.left.height
-            rh = 0 if e.right == None else e.right.height
-            if abs(lh-rh) > 1:                
-                print(f"Node {e.data} is disbalanced with heights: {abs(lh-rh)} left: {lh} right: {rh}")
-                return e
-            if e.left:
-                queue.append(e.left)
-            if e.right:
-                queue.append(e.right)
-        return None 
 
 def _sample_avl():
     avlt = AvlNode(30)
@@ -211,33 +178,19 @@ def test_insert_to_empty_tree():
     print("test_insert_to_empty_tree PASS")
 
 
-def test_getDisbalanced_node():
-    avlt = AvlNode(30)
-    avlt.insert(25)
-    avlt.insert(35)
+def test_insert_rebalance_left_left_condition():
+    avlt = AvlNode(None)
+    items = [30,25,35,20,10]
+    for i in items:
+        avlt.insert(i)
     print(avlt.prt_hl_order())
-    assert avlt.getDisbalanced() == None
-    avlt.insert(20)
-    print(avlt.prt_hl_order())
-    assert avlt.getDisbalanced() == None
-    avlt.insert(10)
-    print(avlt.prt_hl_order())
-    disb = avlt.getDisbalanced()
-    assert disb != None and disb.data == 30
-    print("test_getDisbalanced_node PASS")
-
-
-def test_rebalance_left_left():
-    avlt = AvlNode(30)
-    avlt.insert(25)
-    avlt.insert(35)
-    avlt.insert(20)
-    avlt.insert(10)
-    print(avlt.prt_hl_order())
-    ravlt = avlt.rebalance()
-    print(ravlt.prt_hl_order())
-    assert f"{ravlt.prt_hl_order()}" == "['25(2)', '20(1)', '30(1)', '10(0)', '35(0)']"
-    print("test_rebalance_left_left PASS")
+    assert f"{avlt.prt_hl_order()}" == "['25(2)', '20(1)', '30(1)', '10(0)', '35(0)']"
+    #avlt = AvlNode(None)
+    #items = [70,50,90,30,60,20]
+    #for i in items:
+    #    avlt.insert(i)
+    #assert f"{avlt.prt_hl_order()}" == "['50(2)', '30(1)', '70(1)', '20(0)', '60(0)', '90(0)']"
+    print("test_insert_to_empty_tree PASS")
 
 
 def _sample_left_right():
@@ -248,22 +201,6 @@ def _sample_left_right():
     return avlt
 
 
-def test_rebalance_left_right():
-    avlt = _sample_left_right()
-    print(avlt.prt_hl_order())
-    assert f"{avlt.prt_hl_order()}" == "['70(4)', '50(3)', '90(1)', '30(2)', '60(0)', '80(0)', '100(0)', '20(1)', '25(0)']"
-    #ravlt = avlt.rebalance()
-    #print(ravlt.prt_hl_order())
-    #todo assert
-    print("test_rebalance_left_right PENDING")
-    
-
-def test_get_deepest_disbalanced():
-    avlt = _sample_left_right()
-    dbn = avlt.getDisbalanced()
-    assert dbn.data == 30
-    print(f"db2.data {db2.data}")
-    print("test_get_deepest_disbalanced PENDING")
     
 
 test_create_avl_tree()
@@ -272,9 +209,102 @@ test_post_order_trav()
 test_in_order_trav()
 test_level_order_trav()
 test_insert_to_empty_tree()
-test_getDisbalanced_node()
-test_rebalance_left_left()
-test_rebalance_left_right()
-test_get_deepest_disbalanced()
+test_insert_rebalance_left_left_condition()
+
+
+
+
+
+# Getting the disbalanced node was a wrong path. It is much simpler to keep the tree balanced while recursively inserting new values. The goal is that the insert method garanties that the tree keeps balanced so it does not make sense to have insert and rotate methods. It is not good for performance and increments complexity.
+
+# AVLNode 
+# ....
+#    def _update_disb_node(self, disb_node, new_node):
+#        if self == disb_node:
+#            return new_node
+#        else:
+#            queue = []
+#            queue.append(self)
+#            while queue:
+#                e = queue.pop(0)
+#                if e.left:
+#                    if e.left == disb_node:
+#                        e.left = new_node
+#                        return self
+#                    else:
+#                        queue.append(e.left)
+#                if e.right:
+#                    if e.right == disb_node:
+#                        e.right = new_node
+#                        return self
+#                    else:
+#                        queue.append(e.right)
+#
+#
+#    def getDisbalanced(self):
+#        queue = []
+#        queue.append(self)
+#        while queue:
+#            e = queue.pop(0)
+#            lh = 0 if e.left == None else e.left.height
+#            rh = 0 if e.right == None else e.right.height
+#            if abs(lh-rh) > 1:                
+#                print(f"Node {e.data} is disbalanced with heights: {abs(lh-rh)} left: {lh} right: {rh}")
+#                return e
+#            if e.left:
+#                queue.append(e.left)
+#            if e.right:
+#                queue.append(e.right)
+#        return None 
+
+#def test_getDisbalanced_node():
+#    avlt = AvlNode(30)
+#    avlt.insert(25)
+#    avlt.insert(35)
+#    print(avlt.prt_hl_order())
+#    assert avlt.getDisbalanced() == None
+#    avlt.insert(20)
+#    print(avlt.prt_hl_order())
+#    assert avlt.getDisbalanced() == None
+#    avlt.insert(10)
+#    print(avlt.prt_hl_order())
+#    disb = avlt.getDisbalanced()
+#    assert disb != None and disb.data == 30
+#    print("test_getDisbalanced_node PASS")
+#
+#
+#def test_rebalance_left_left():
+#    avlt = AvlNode(30)
+#    avlt.insert(25)
+#    avlt.insert(35)
+#    avlt.insert(20)
+#    avlt.insert(10)
+#    print(avlt.prt_hl_order())
+#    ravlt = avlt.rebalance()
+#    print(ravlt.prt_hl_order())
+#    assert f"{ravlt.prt_hl_order()}" == "['25(2)', '20(1)', '30(1)', '10(0)', '35(0)']"
+#    print("test_rebalance_left_left PASS")
+#
+#def test_rebalance_left_right():
+#    avlt = _sample_left_right()
+#    print(avlt.prt_hl_order())
+#    assert f"{avlt.prt_hl_order()}" == "['70(4)', '50(3)', '90(1)', '30(2)', '60(0)', '80(0)', '100(0)', '20(1)', '25(0)']"
+#    #ravlt = avlt.rebalance()
+#    #print(ravlt.prt_hl_order())
+#    #todo assert
+#    print("test_rebalance_left_right PENDING")
+#    
+#
+#def test_get_deepest_disbalanced():
+#    avlt = _sample_left_right()
+#    dbn = avlt.getDisbalanced()
+#    assert dbn.data == 30
+#    print(f"db2.data {db2.data}")
+#    print("test_get_deepest_disbalanced PENDING")
+
+#test_getDisbalanced_node()
+#test_rebalance_left_left()
+#test_rebalance_left_right()
+#test_get_deepest_disbalanced()
 
 
