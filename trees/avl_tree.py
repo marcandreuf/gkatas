@@ -89,9 +89,9 @@ class AvlNode:
             
         
     def _rebalance_node(self, node): 
-        print(f"Rebalance node: {node.data}")
-        lh = 0 if node.left == None else node.left.height
-        rh = 0 if node.right == None else node.right.height
+        lh = 0 if node.left == None else node.left.height+1
+        rh = 0 if node.right == None else node.right.height+1
+        print(f"Rebalance node: {node.data} lh: {lh}, rh: {rh}")
         if abs(lh-rh) > 1:
             print(f"node {node.data} is not balanced")
             if node.left and node.left.left:
@@ -189,13 +189,28 @@ def test_insert_rebalance_left_left_condition():
     for i in items:
         avlt = avlt.insert(i)
     print(avlt.prt_hl_order())
-    assert f"{avlt.prt_hl_order()}" == "['25(2)', '20(1)', '30(1)', '10(0)', '35(0)']"
+    assert f"{avlt.prt_hl_order()}" == "['30(2)', '20(1)', '35(0)', '10(0)', '25(0)']"
     avlt = AvlNode(None)
     items = [70,50,90,30,60,20]
     for i in items:
         avlt = avlt.insert(i)
     print(avlt.prt_hl_order())
     assert f"{avlt.prt_hl_order()}" == "['50(2)', '30(1)', '70(1)', '20(0)', '60(0)', '90(0)']"
+    avlt = AvlNode(None)
+    items = [70,50,90,30,60,80,100,20,10]
+    for i in items:
+        avlt = avlt.insert(i)
+    print(avlt.prt_hl_order())
+    assert f"{avlt.prt_hl_order()}" == "['70(3)', '50(2)', '90(1)', '20(1)', '60(0)', '80(0)', '100(0)', '10(0)', '30(0)']"
+    print("test_insert_rebalance_left_left_condition PASS")
+
+def test_insert_rebalance_left_right_condition():
+    avlt = AvlNode(None)
+    items = [70,50,90,30,60,80,100,20,25]
+    for i in items:
+        avlt = avlt.insert(i)
+    print(avlt.prt_hl_order())
+    assert f"{avlt.prt_hl_order()}" == "['70(3)', '50(2)', '90(1)', '25(1)', '60(0)', '80(0)', '100(0)', '20(0)', '30(0)']"
     print("test_insert_rebalance_left_left_condition PASS")
 
 
@@ -216,7 +231,7 @@ test_in_order_trav()
 test_level_order_trav()
 test_insert_to_empty_tree()
 test_insert_rebalance_left_left_condition()
-
+test_insert_rebalance_left_right_condition()
 
 
 
