@@ -60,41 +60,46 @@ class AvlNode:
             if e.right:
                 queue.append(e.right)
         return ret
-
+    
+    # As we can not "easily" change self when we need to rebalance the self node (root)
+    # this method returns the new rebalanced tree.
     def insert(self, value):
+        print(f"insert {value} on node {self.data}")
         if self.data == None:
             self.data = value
+            return self
         else:
-            lh = 0
-            rh = 0
             if value < self.data:
                 if self.left:
-                    self.left.insert(value)
-                    self._rebalance()
+                    self.left = self.left.insert(value)                    
                 else:
                     self.left = AvlNode(value)
             if value > self.data:
                 if self.right:
-                    self.right.insert(value)
-                    self._rebalance()
+                    self.right = self.right.insert(value)
                 else:
                     self.right = AvlNode(value)
             lh = self.left.height + 1 if self.left else 0
             rh = self.right.height + 1 if self.right else 0
             self.height = max(lh, rh)
+            print(f"on node {self.data} before rebalance: {self.prt_hl_order()}")
+            bal_self = self._rebalance_node(self)
+            print(f"on node {bal_self.data} after rebalance: {bal_self.prt_hl_order()}")
+            return bal_self
             
-    # Rebalance left and right children. As we can not replace self we need to work with rebalancing the childrens after each new insertion.
-    def _rebalance(self):
-        n = self.left
-        lh = 0 if n.left == None else n.left.height
-        rh = 0 if n.right == None else n.right.height
+        
+    def _rebalance_node(self, node): 
+        print(f"Rebalance node: {node.data}")
+        lh = 0 if node.left == None else node.left.height
+        rh = 0 if node.right == None else node.right.height
         if abs(lh-rh) > 1:
-            print(f"node {n.data} is not balanced")
-            if n.left and n.left.left:
-                self.left = self._right_rotation(n)
-            if n.left and n.left.right:
-                self.left = self._left_rotation(n)
-        #TODO rebalance right node
+            print(f"node {node.data} is not balanced")
+            if node.left and node.left.left:
+                node = self._right_rotation(node)
+            if node.left and node.left.right:
+                node = self._left_rotation(node)
+        return node
+        
 
     def _left_rotation(self, disb_node): #left right condition
         print(f"left {disb_node.left.data}")
@@ -112,7 +117,7 @@ class AvlNode:
         lh = new_root.left.height + 1 if new_root.left else 0
         rh = new_root.right.height + 1 if new_root.right else 0
         new_root.height = max(lh, rh)                
-        return self._update_disb_node(disb_node, new_root)
+        return new_root
 
 
 
@@ -182,15 +187,16 @@ def test_insert_rebalance_left_left_condition():
     avlt = AvlNode(None)
     items = [30,25,35,20,10]
     for i in items:
-        avlt.insert(i)
+        avlt = avlt.insert(i)
     print(avlt.prt_hl_order())
     assert f"{avlt.prt_hl_order()}" == "['25(2)', '20(1)', '30(1)', '10(0)', '35(0)']"
-    #avlt = AvlNode(None)
-    #items = [70,50,90,30,60,20]
-    #for i in items:
-    #    avlt.insert(i)
-    #assert f"{avlt.prt_hl_order()}" == "['50(2)', '30(1)', '70(1)', '20(0)', '60(0)', '90(0)']"
-    print("test_insert_to_empty_tree PASS")
+    avlt = AvlNode(None)
+    items = [70,50,90,30,60,20]
+    for i in items:
+        avlt = avlt.insert(i)
+    print(avlt.prt_hl_order())
+    assert f"{avlt.prt_hl_order()}" == "['50(2)', '30(1)', '70(1)', '20(0)', '60(0)', '90(0)']"
+    print("test_insert_rebalance_left_left_condition PASS")
 
 
 def _sample_left_right():
