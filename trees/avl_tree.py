@@ -241,8 +241,57 @@ def _avl_tree(items):
     avlt = AvlNode(None)
     for i in items:
         avlt = avlt.insert(i)
-    print(avlt.prt_hl_order())
+    print(avlt.prt_hl_]order())
     return avlt
+
+def test_delete_leaf_node_no_rotation():
+    avlt = _avl_tree([70,50,90,30,60,80,100,20,40])
+    # avlt.delete(40)
+    #assert f"{avlt.prt_hl_order()}" == "['70(3)', '50(2)', '90(1)', '30(1)', '60(0)', '80(0)', '100(0)', '20(0)']"
+    print("test_delete_leaf_node_no_rotation PENDING")
+
+def test_delete_node_with_left_child_no_rotation():
+    avlt = _avl_tree([70,50,90,30,60,80,100,20])
+    # avlt.delete(30)
+    #assert f"{avlt.prt_hl_order()}" == "['70(3)', '50(1)', '90(1)', '20(0)', '60(0)', '80(0)', '100(0)']"
+    print("test_delete_node_with_left_child_no_rotation PENDING")
+
+
+def test_delete_node_with_two_children_no_rotation():
+    avlt = _avl_tree([70,50,90,30,60,80,100,20,40,85])
+    # avlt.delete(70)
+    #assert f"{avlt.prt_hl_order()}" == "['80(3)', '50(2)', '90(1)', '30(1)', '60(0)', '85(0)', '100(0)', '20(0)', '40(0)']"
+    print("test_delete_node_with_two_children_no_rotation PENDING")
+
+
+def test_delete_left_left_condition_with_rotation():
+    avlt = _avl_tree([70,50,90,30,60,80,100,20,40,85])
+    # avlt.delete(60)
+    #assert f"{avlt.prt_hl_order()}" == "['70(3)', '30(1)', '90(2)', '20(0)', '50(0)', '80(1)', '100(0)', '80(0)']"
+    print("test_delete_left_left_condition_with_rotation PENDING")
+
+
+def test_delete_left_right_condition_with_rotation():
+    avlt = _avl_tree([70,50,90,30,60,80,100,20,85])
+    # avlt.delete(100)
+    #assert f"{avlt.prt_hl_order()}" == "['70(3)', '50(2)', '80(1)', '30(1)', '60(0)', '85(0)', '90(0)', '20(0)']"
+    print("test_delete_left_right_condition_with_rotation PENDING")
+
+
+def test_delete_right_right_condition_with_rotation():
+    avlt = _avl_tree([70,50,90,30,60,80,100,65,85])
+    # avlt.delete(30)
+    #assert f"{avlt.prt_hl_order()}" == "['70(3)', '60(1)', '90(2)', '50(0)', '65(0)', '80(1)', '100(0)', '85(0)']"
+    print("test_delete_right_right_condition_with_rotation PENDING")
+
+
+def test_delete_right_left_condition_with_rotation():
+    avlt = _avl_tree([70,50,90,30,60,80,100,55,85])
+    # avlt.delete(30)
+    #assert f"{avlt.prt_hl_order()}" == "['70(3)', '60(1)', '90(2)', '50(0)', '55(0)', '80(1)', '100(0)', '85(0)']"
+    print("test_delete_right_left_condition_with_rotation PENDING")
+
+
 
 test_create_avl_tree()
 test_pre_order_trav()
@@ -255,6 +304,14 @@ test_insert_rebalance_left_right_condition()
 test_insert_rebalance_right_right_condition()
 test_insert_rebalance_right_left_condition()
 test_insert_all_conditions()
+test_delete_leaf_node_no_rotation()
+test_delete_node_with_left_child_no_rotation()
+test_delete_node_with_two_children_no_rotation()
+test_delete_left_left_condition_with_rotation()
+test_delete_left_right_condition_with_rotation()
+test_delete_right_right_condition_with_rotation()
+test_delete_right_left_condition_with_rotation()
+
 
 
 # Getting the disbalanced node was a wrong path. It is much simpler to keep the tree balanced while recursively inserting new values. The goal is that the insert method garanties that the tree keeps balanced so it does not make sense to have insert and rotate methods. It is not good for performance and increments complexity.
