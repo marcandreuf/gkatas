@@ -29,6 +29,11 @@ def insertion_sort(list):
 def bucket_sort():
     pass
 
+def merge_sort():
+    pass
+
+def quick_sort():
+    pass
 
 def test_buble_sort():
     l = [3,5,2,7,9,3,4,6,7,5]
@@ -57,10 +62,25 @@ def test_bucket_sort():
     #assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
     print("test_bucket_sort PENDING")
 
+def test_merge_sort():
+    #l = [3,5,2,7,9,3,4,6,7,5]
+    #merge_sort(l)
+    #print(l)
+    #assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
+    print("test_merge_sort PENDING")
+
+def test_quick_sort():
+    #l = [3,5,2,7,9,3,4,6,7,5]
+    #quick_sort(l)
+    #print(l)
+    #assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
+    print("test_quick_sort PENDING")
 
 test_buble_sort()
 test_selection_sort()
 test_insertion_sort()
 test_bucket_sort()
+test_merge_sort()
+test_quick_sort()
 
 
