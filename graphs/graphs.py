@@ -1,6 +1,8 @@
 
 
 # TODO. Implement a class for each type of graph.
+#   Implement add, remove and print methods
+#   Extra bonus implement search methods
 # Split in different files, one per type of graph.
 
 def test_unweighted_undirected():
