@@ -86,6 +86,22 @@ def test_find_min_path():
     print("test_find_min_path PENDING")
 
 
+def test_negative_graph():
+    """
+     1. Change one distance to a negative number
+     2. test and run that is not working
+     3. Test transform to positive solution. Given -x is the smallest negative distance.
+        Add +x to all distances so that -x becomes = 0.
+        Substract -x to the final solution distances.
+        Run dijkstar algorithm and check if get the correct solution.
+    """ 
+    print("test_negative_graph PENDING")
+
 #TODO. Implement all TDD tests to implement the algorithms step by step.
+# test_print_graph()
+# test each step of the implementation from most basic
+# case to final solution.
+
 # Final verification test
 test_find_min_path()
+test_negative_graph()
