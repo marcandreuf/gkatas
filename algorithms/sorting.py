@@ -55,13 +55,15 @@ def test_insertion_sort():
     assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
     print("test_insertion_sort PASS")
 
-def test_bucket_sort():
+# TODO test_bucket_sort
+def test_bucket_sort():    
     #l = [3,5,2,7,9,3,4,6,7,5]
     #bucket_sort(l)
     #print(l)
     #assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
     print("test_bucket_sort PENDING")
 
+# TODO test_merge_sort
 def test_merge_sort():
     #l = [3,5,2,7,9,3,4,6,7,5]
     #merge_sort(l)
@@ -69,6 +71,7 @@ def test_merge_sort():
     #assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
     print("test_merge_sort PENDING")
 
+# TODO test_quick_sort
 def test_quick_sort():
     #l = [3,5,2,7,9,3,4,6,7,5]
     #quick_sort(l)
@@ -76,6 +79,7 @@ def test_quick_sort():
     #assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
     print("test_quick_sort PENDING")
 
+# TODO test_heap_sort
 def test_heap_sort():
     #l = [3,5,2,7,9,3,4,6,7,5]
     #heap_sort(l)

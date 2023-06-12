@@ -41,21 +41,25 @@ def _sample_ssspp():
              "e" : ["f"],
              "g" : ["f"]}
 
+# TODO test_bfs_traversal
 def test_bfs_traversal():
     #g = _trav_sample_graph()
     #assert g.bfs() == ['a', 'b', 'c', 'd', 'e', 'f']
     print("test_bfs_traversal PENDING")
 
+# TODO test_dfs_traversal
 def test_dfs_traversal():
     #g = _trav_sample_graph()
     #assert g.dfs() == ['a', 'c', 'e', 'f', 'd', 'b' ]
     print("test_dfs_traversal PENDING")
 
+# TODO test_topolocialSort
 def test_topolocialSort():
     #g = _sample_graph()
     #assert g.topologicalSort() == ['B', 'D', 'A', 'C', 'E', 'F', 'G', 'H']
     print("test_topolocialSort PENDING")
 
+# TODO test_sssp_bfs
 def test_sssp_bfs():
     #g = _sample_ssspp()
     #assert g.sssp_bfs("a", "f") = ['a', 'b', 'd', 'f']

@@ -13,7 +13,7 @@ def test_create_Trie():
     assert t.root is not None
     print("test_create_Trie PASS")
 
-
+# TODO test_insert
 def test_insert():
     t = Trie()
     #t.insert('APP')
@@ -26,12 +26,15 @@ def test_insert():
     #assert t.words = ['APP', 'API', 'APIS']
     print("test_insert PENDING")
 
+
+# TODO test_search
 def test_search():
     t = Trie()
     #t.insert('API')
     #assert t.search('API')
     print("test_search PENDING")
 
+# TODO test_delete_part_prefix
 def test_delete_part_prefix():
     t = Trie()
     #t.insert('API')
@@ -41,6 +44,7 @@ def test_delete_part_prefix():
     #assert t.search('API') == False
     print("test_delete_part_prefix PENDING")
 
+# TODO test_delete_full_prefix
 def test_delete_full_prefix():
     t = Trie()
     #t.insert('APPLE')
@@ -52,6 +56,7 @@ def test_delete_full_prefix():
     #assert t.search('APIS')
     print("test_delete_full_prefix PENDING")
 
+# TODO test_delete_long_word_on_top_of_other_word
 def test_delete_long_word_on_top_of_other_word():
     t = Trie()
     #t.insert('APIS')
@@ -61,7 +66,8 @@ def test_delete_long_word_on_top_of_other_word():
     #assert t.search('AP')
     print("test_delete_long_word_on_top_of_other_word PENDING")
 
-def test_delte_word_with_no_dependencies():
+# TODO test_delete_word_with_no_dependencies
+def test_delete_word_with_no_dependencies():
     t = Trie()
     #t.insert('APIS')
     #t.insert('K')
@@ -77,4 +83,4 @@ test_search()
 test_delete_part_prefix()
 test_delete_full_prefix()
 test_delete_long_word_on_top_of_other_word()
-test_delte_word_with_no_dependencies()
+test_delete_word_with_no_dependencies()

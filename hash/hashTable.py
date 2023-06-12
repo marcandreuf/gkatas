@@ -63,6 +63,8 @@ def test_add_collision_oa_quadratic_probing():
 def test_add_collision_oa_double_hashing():
     print("test_add_collision_oa_double_hashing PENDING")
 
+
+# TODO test_add_collision_inner_hash_table
 def test_add_collision_inner_hash_table():
     # Test the idea to use child hast table with 
     # the child hasing function taking as input the parent

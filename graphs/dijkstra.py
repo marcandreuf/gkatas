@@ -77,7 +77,7 @@ def _sample_graph():
             'G':nodeG,
             'H':nodeH}
     
-
+# TODO test_find_min_path
 def test_find_min_path():
     #g = _sample_graph()
     #d = Dijkstra()
@@ -85,7 +85,7 @@ def test_find_min_path():
     #assert d.get_shortest_path(g['A', g['G']]) == ['A','C','H','G']
     print("test_find_min_path PENDING")
 
-
+# TODO test_negative_graph
 def test_negative_graph():
     """
      1. Change one distance to a negative number
