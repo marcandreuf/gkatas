@@ -74,10 +74,36 @@ def _num_of_buckets(list):
     return round(math.sqrt(len(list)))
 
 
-def merge_sort():
-    pass
+def merge_sort(list):
+    if len(list) == 0 or len(list) == 1:
+        return list
+    else:
+        half = len(list) // 2 
+        _left = list[:half]
+        _right = list[half:]
+        return _merge(merge_sort(_left), merge_sort(_right))
+    
+def _merge(list_a, list_b):
+    ret = []
+    i = j = 0
+    while i < len(list_a) and j < len(list_b):
+        if list_a[i] <= list_b[j]:
+            ret.append(list_a[i])
+            i += 1
+        else:
+            ret.append(list_b[j])
+            j += 1
 
+    while i < len(list_a):
+        ret.append(list_a[i])
+        i += 1
 
+    while j < len(list_b):
+        ret.append(list_b[j])
+        j += 1  
+
+    return ret
+   
 def quick_sort():
     pass
 
@@ -137,17 +163,27 @@ def test_bucket_sort():
 
 
 
-# TODO test_merge_sort
+def test_merge():
+    assert _merge([1], []) == [1]
+    assert _merge([], [1]) == [1]
+    assert _merge([1], [2]) == [1,2]
+    assert _merge([1,3], [2]) == [1,2,3]
+    assert _merge([1,3], [2,4,5]) == [1,2,3,4,5]
+    assert _merge([1,3], [2,4,5,6]) == [1,2,3,4,5,6]
+    assert _merge([2,3], [4,5]) == [2,3,4,5]
+    assert _merge([2,3,4,7], [5,6,7,9]) == [2,3,4,5,6,7,7,9]
+    print("test_merge PASS")    
+
+
 def test_merge_sort():
-    #l = [3,5,2,7,9,3,4,6,7,5]
-    # merge_sort(l)
-    # print(l)
-    #assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
-    print("test_merge_sort PENDING")
+    assert merge_sort([]) == []
+    assert merge_sort([1]) == [1]
+    assert merge_sort([1,2]) == [1,2]
+    assert merge_sort([2,1]) == [1,2]
+    assert merge_sort([3,5,2,7,9,3,4,6,7,5]) == [2,3,3,4,5,5,6,7,7,9]
+    print("test_merge_sort PASS")
 
 # TODO test_quick_sort
-
-
 def test_quick_sort():
     #l = [3,5,2,7,9,3,4,6,7,5]
     # quick_sort(l)
@@ -173,6 +209,7 @@ test_insertion_sort()
 test_sqrt_list_len()
 test_num_of_buckets()
 test_bucket_sort()
-# test_merge_sort()
+test_merge()
+test_merge_sort()
 # test_quick_sort()
 # test_heap_sort()
