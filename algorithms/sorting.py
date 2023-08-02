@@ -6,7 +6,7 @@ def buble_sort(list):
     for i in range(len(list)-1):
         for j in range(len(list)-i-1):
             if list[j] > list[j+1]:
-                swap(list, j, j+1)
+                _swap(list, j, j+1)
                 count = count + 1
     # print(f"buble_sort count {count}")
 
@@ -18,14 +18,28 @@ def buble_sort_optim(list):
         ordered = True
         for i in range(len(list)-1):
             if list[i] > list[i+1]:
-                swap(list, i, i+1)
+                _swap(list, i, i+1)
                 count = count + 1
                 ordered = False
     # print(f"buble_sort_optim count {count}")
 
 
-def swap(list, e1, e2):
+def _swap(list, e1, e2):
     list[e1], list[e2] = list[e2], list[e1]
+
+
+def test_buble_sort():
+    l = [1, 2, 3, 5, 2, 7, 9, 3, 4, 6, 7, 5]
+    buble_sort(l)
+    assert l == [1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
+    print("test_buble_sort PASS")
+
+
+def test_buble_sort_optim():
+    l = [1, 2, 3, 5, 2, 7, 9, 3, 4, 6, 7, 5]
+    buble_sort_optim(l)
+    assert l == [1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
+    print("buble_sort_optim PASS")
 
 
 def selection_sort(list):
@@ -35,7 +49,13 @@ def selection_sort(list):
         for i in range(s+1, len(list)):
             if list[i] < list[m]:
                 m = i
-        swap(list, s, m)
+        _swap(list, s, m)
+
+def test_selection_sort():
+    l = [3, 5, 2, 7, 9, 3, 4, 6, 7, 5]
+    selection_sort(l)
+    assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
+    print("test_selection_sort PASS")
 
 
 def insertion_sort(list):
@@ -46,6 +66,12 @@ def insertion_sort(list):
             list[j+1] = list[j]
             j -= 1
         list[j+1] = key
+
+def test_insertion_sort():
+    l = [3, 5, 2, 7, 9, 3, 4, 6, 7, 5]
+    insertion_sort(l)
+    assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
+    print("test_insertion_sort PASS")
 
 
 def bucket_sort(list):
@@ -72,6 +98,29 @@ def _sqrt_list_len(list):
 
 def _num_of_buckets(list):
     return round(math.sqrt(len(list)))
+
+def test_sqrt_list_len():
+    assert _sqrt_list_len([]) == 0
+    assert _sqrt_list_len([1]) == 1
+    assert _sqrt_list_len([1,2]) == 1.4142135623730951
+    assert _sqrt_list_len([3, 5, 2, 7, 9, 3, 4, 6, 7, 5]) == 3.1622776601683795
+    print("test_sqrt_list_len PASS")
+
+def test_num_of_buckets():
+    assert _num_of_buckets([]) == 0
+    assert _num_of_buckets([3, 5, 2, 7, 9, 3, 4, 6, 7, 5]) == 3
+    assert _num_of_buckets([1,2]) == 1
+    assert _num_of_buckets([1,2,3]) == 2
+    assert _num_of_buckets([1,2,3,4]) == 2
+    assert _num_of_buckets([1,2,3,4,5]) == 2
+    assert _num_of_buckets([1,2,3,4,5,6]) == 2
+    assert _num_of_buckets([1,2,3,4,5,6,7,8,9]) == 3
+    print("test_num_of_buckets PASS")
+
+
+def test_bucket_sort():
+    assert bucket_sort([3, 5, 2, 7, 9, 3, 4, 6, 7, 5]) == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
+    print("test_bucket_sort PASS")
 
 
 def merge_sort(list):
@@ -103,64 +152,6 @@ def _merge(list_a, list_b):
         j += 1  
 
     return ret
-   
-def quick_sort():
-    pass
-
-
-def test_buble_sort():
-    l = [1, 2, 3, 5, 2, 7, 9, 3, 4, 6, 7, 5]
-    buble_sort(l)
-    assert l == [1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
-    print("test_buble_sort PASS")
-
-
-def test_buble_sort_optim():
-    l = [1, 2, 3, 5, 2, 7, 9, 3, 4, 6, 7, 5]
-    buble_sort_optim(l)
-    assert l == [1, 2, 2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
-    print("buble_sort_optim PASS")
-
-
-def test_selection_sort():
-    l = [3, 5, 2, 7, 9, 3, 4, 6, 7, 5]
-    selection_sort(l)
-    assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
-    print("test_selection_sort PASS")
-
-
-def test_insertion_sort():
-    l = [3, 5, 2, 7, 9, 3, 4, 6, 7, 5]
-    insertion_sort(l)
-    assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
-    print("test_insertion_sort PASS")
-
-
-
-def test_sqrt_list_len():
-    assert _sqrt_list_len([]) == 0
-    assert _sqrt_list_len([1]) == 1
-    assert _sqrt_list_len([1,2]) == 1.4142135623730951
-    assert _sqrt_list_len([3, 5, 2, 7, 9, 3, 4, 6, 7, 5]) == 3.1622776601683795
-    print("test_sqrt_list_len PASS")
-
-def test_num_of_buckets():
-    assert _num_of_buckets([]) == 0
-    assert _num_of_buckets([3, 5, 2, 7, 9, 3, 4, 6, 7, 5]) == 3
-    assert _num_of_buckets([1,2]) == 1
-    assert _num_of_buckets([1,2,3]) == 2
-    assert _num_of_buckets([1,2,3,4]) == 2
-    assert _num_of_buckets([1,2,3,4,5]) == 2
-    assert _num_of_buckets([1,2,3,4,5,6]) == 2
-    assert _num_of_buckets([1,2,3,4,5,6,7,8,9]) == 3
-    print("test_num_of_buckets PASS")
-
-
-def test_bucket_sort():
-    assert bucket_sort([3, 5, 2, 7, 9, 3, 4, 6, 7, 5]) == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
-    print("test_bucket_sort PASS")
-
-
 
 
 def test_merge():
@@ -183,17 +174,54 @@ def test_merge_sort():
     assert merge_sort([3,5,2,7,9,3,4,6,7,5]) == [2,3,3,4,5,5,6,7,7,9]
     print("test_merge_sort PASS")
 
-# TODO test_quick_sort
+
+   
+def quick_sort(list):
+    ret = []
+    if len(list) <= 1:
+        return list
+    pivot = _pivot(list)    
+    # print(f"piv: {pivot}")
+    ret += quick_sort(list[:pivot])
+    ret.append(list[pivot])        
+    ret += quick_sort(list[pivot+1:])
+    # print(f"ret: {ret}")
+    return ret
+
+def _pivot(list):
+    piv = swap = 0
+    if len(list) > 0:
+        for i in range(1, len(list)):
+            if(list[i] < list[piv]):
+                swap += 1
+                _swap(list, i, swap)
+        _swap(list, piv, swap)
+    return swap
+
+
+def test_pivot():
+    assert _pivot([]) == 0
+    assert _pivot([1]) == 0
+    assert _pivot([1,2]) == 0
+    assert _pivot([2,1]) == 1
+    assert _pivot([2,1,3]) == 1
+    assert _pivot([3,2,1]) == 2
+    assert _pivot([3,5,0,6,2,1,4]) == 3
+
+
 def test_quick_sort():
-    #l = [3,5,2,7,9,3,4,6,7,5]
-    # quick_sort(l)
-    # print(l)
-    #assert l == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
-    print("test_quick_sort PENDING")
+    assert quick_sort([]) == []
+    assert quick_sort([1]) == [1]
+    assert quick_sort([2,1]) == [1,2]
+    assert quick_sort([3,5,2,7,9,3,4,6,7,5]) == [2, 3, 3, 4, 5, 5, 6, 7, 7, 9]
+    print("test_quick_sort PASS")
+
+
+
+def heap_sort(list):
+    pass
 
 # TODO test_heap_sort
-
-
 def test_heap_sort():
     #l = [3,5,2,7,9,3,4,6,7,5]
     # heap_sort(l)
@@ -211,5 +239,6 @@ test_num_of_buckets()
 test_bucket_sort()
 test_merge()
 test_merge_sort()
-# test_quick_sort()
-# test_heap_sort()
+test_pivot()
+test_quick_sort()
+test_heap_sort()
